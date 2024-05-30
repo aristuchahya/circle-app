@@ -9,6 +9,7 @@ const port = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello welcome to circle!");
