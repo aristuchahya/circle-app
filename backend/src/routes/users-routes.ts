@@ -7,8 +7,8 @@ import { authenticate } from "../middlewares/authenticate";
 
 const router = Router();
 
-router.get("/users", userController.getAllUsers);
-router.get("/users/:id", userController.getUserById);
+router.get("/users", authenticate, userController.getAllUsers);
+router.get("/users/:id", authenticate, userController.getUserById);
 router.post("/users", userController.createUser);
 router.put(
   "/users/:id",
@@ -16,7 +16,7 @@ router.put(
   upload.single("photoProfile"),
   userController.updateUser
 );
-router.delete("/users/:id", userController.deleteUser);
+router.delete("/users/:id", authenticate, userController.deleteUser);
 
 //auth
 router.post("/auth/login", authController.login);
@@ -24,9 +24,19 @@ router.post("/auth/register", authController.register);
 
 //threads
 router.get("/threads", authenticate, threadController.findAll);
-router.get("/threads/:id", threadController.findThread);
-router.post("/threads", upload.single("image"), threadController.create);
-router.put("/threads/:id", upload.single("image"), threadController.update);
-router.delete("/threads/:id", threadController.deleteThread);
+router.get("/threads/:id", authenticate, threadController.findThread);
+router.post(
+  "/threads",
+  authenticate,
+  upload.single("image"),
+  threadController.create
+);
+router.put(
+  "/threads/:id",
+  authenticate,
+  upload.single("image"),
+  threadController.update
+);
+router.delete("/threads/:id", authenticate, threadController.deleteThread);
 
 export default router;

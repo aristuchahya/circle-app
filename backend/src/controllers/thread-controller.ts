@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { threadService } from "../services/threads-service";
 import { CreateThreadDto } from "../dto/threads-dto";
-import { AuthRequest } from "../middlewares/authenticate";
 
 class ThreadsController {
   async findAll(req: Request, res: Response) {
     try {
       const thread = await threadService.getAllThreads();
-      res.status(200).json(thread);
+      res.status(200).json({ message: "success", thread });
     } catch (error) {
       return error;
     }
@@ -20,25 +19,27 @@ class ThreadsController {
       if (!thread) return res.status(404).json({ message: "Thread not found" });
       res.status(200).json(thread);
     } catch (error) {
-      return error;
+      return res.status(400).json({ message: "Bad Request" });
     }
   }
 
-  async create(req: AuthRequest, res: Response) {
+  async create(req: Request, res: Response) {
     try {
+      const user = res.locals.user;
+
+      if (!user) return res.status(404).json({ message: "User not found" });
+
       const body = {
         ...req.body,
         image: req.file.path,
+        createdBy: user.id,
       };
-      const userId = req.user?.id;
 
-      // const threadData: CreateThreadDto = ({ image: req.file.path } = req.body);
-
-      const createdThread = await threadService.createThread(body, userId);
+      const createdThread = await threadService.createThread(body);
       console.log("createdThread result:", createdThread);
-      res.status(201).json(createdThread);
+      res.status(201).json({ message: "Thread created", createdThread });
     } catch (error) {
-      return error;
+      return res.status(400).json({ message: "Bad Request" });
     }
   }
 
@@ -49,15 +50,18 @@ class ThreadsController {
       const thread = await threadService.findOneThread(Number(id));
       if (!thread) return res.status(404).json({ message: "Thread not found" });
 
+      const user = res.locals.user;
+
       const body = {
         ...req.body,
         image: req.file.path,
+        createdBy: user.id,
       };
 
       const updateThread = await threadService.updateThread(Number(id), body);
-      res.status(200).json(updateThread);
+      res.status(200).json({ message: "Thread updated", updateThread });
     } catch (error) {
-      return error;
+      return res.status(400).json({ message: "Bad Request" });
     }
   }
 
@@ -67,9 +71,9 @@ class ThreadsController {
       const thread = await threadService.findOneThread(Number(id));
       if (!thread) return res.status(404).json({ message: "Thread not found" });
       const deleteThread = await threadService.deleteThread(Number(id));
-      res.status(200).json(deleteThread);
+      res.status(200).json({ message: "Thread deleted" });
     } catch (error) {
-      return error;
+      return res.status(400).json({ message: "Bad Request" });
     }
   }
 }

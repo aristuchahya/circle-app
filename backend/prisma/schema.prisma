@@ -42,8 +42,8 @@ model Thread {
   numberOfReplies Int?
   Reply           Reply? @relation("UserReply", fields: [numberOfReplies], references: [id])
 
-  createdBy Int?
-  Created   User? @relation("CreatedBy", fields: [createdBy], references: [id])
+  createdBy Int
+  created   User @relation("CreatedBy", fields: [createdBy], references: [id])
 
   likes   Like[]
   replies Reply[]
