@@ -27,7 +27,7 @@ class ThreadSevice {
     }
   }
 
-  async createThread(dto: CreateThreadDto) {
+  async createThread(dto: CreateThreadDto, userId: number) {
     try {
       const validate = createthreadschema.validate(dto);
       if (validate.error) {
@@ -45,13 +45,21 @@ class ThreadSevice {
       });
 
       const thread = await prisma.thread.create({
-        data: { ...dto, image: upload.secure_url },
+        data: { ...dto, image: upload.secure_url, createdBy: userId },
       });
+      console.log("thread result:", thread);
+
       return thread;
     } catch (error) {
       return error;
     }
   }
+
+  // async getValidUser() {
+  //   try {
+  //     const user = await prisma.user.findMany({});
+  //   } catch (error) {}
+  // }
 
   async updateThread(id: number, dto: UpdateThreadDto) {
     try {

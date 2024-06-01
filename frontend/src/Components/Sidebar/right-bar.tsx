@@ -18,6 +18,7 @@ import { Follow } from "../Element/Button/follow";
 
 import { EditProfile } from "../Element/Button/edit";
 import { EditModal } from "../Element/Modal/edit-modal";
+import { useState } from "react";
 
 export function RightBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -140,6 +141,11 @@ export function RightBar() {
 }
 
 export function UserFollow() {
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+
+  const handleFollow = () => {
+    setIsFollowing((prev) => !prev);
+  };
   return (
     <>
       <HStack>
@@ -153,7 +159,11 @@ export function UserFollow() {
           </Text>
         </VStack>
         <Spacer />
-        <Follow fontSize="14">Follow</Follow>
+        <Follow
+          fontSize="14"
+          onClick={handleFollow}
+          isFollowing={isFollowing}
+        ></Follow>
       </HStack>
       <HStack>
         <Avatar boxSize="2em" />
@@ -166,7 +176,11 @@ export function UserFollow() {
           </Text>
         </VStack>
         <Spacer />
-        <Follow fontSize="14">Follow</Follow>
+        <Follow
+          fontSize="14"
+          onClick={handleFollow}
+          isFollowing={isFollowing}
+        ></Follow>
       </HStack>
       <HStack>
         <Avatar boxSize="2em" />
@@ -179,7 +193,11 @@ export function UserFollow() {
           </Text>
         </VStack>
         <Spacer />
-        <Follow fontSize="14">Follow</Follow>
+        <Follow
+          fontSize="14"
+          onClick={handleFollow}
+          isFollowing={isFollowing}
+        ></Follow>
       </HStack>
     </>
   );

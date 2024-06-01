@@ -1,23 +1,25 @@
 import { Button } from "@chakra-ui/react";
 
 interface TextProps {
-  children: string;
   top?: string;
   left?: string;
   right?: string;
   bottom?: string;
   fontSize?: string;
   mt?: string;
+  onClick?: () => void;
+  isFollowing?: boolean;
 }
 
 export function Follow({
-  children,
   top,
   left,
   right,
   bottom,
   fontSize,
   mt,
+  onClick,
+  isFollowing,
 }: TextProps) {
   return (
     <>
@@ -35,11 +37,12 @@ export function Follow({
         bottom={bottom}
         border="1px solid white"
         bg="#262626"
-        color="white"
+        color={isFollowing ? "grey" : "white"}
         fontWeight="md"
+        onClick={onClick}
         _hover={{ bg: "white", color: "black" }}
       >
-        {children}
+        {isFollowing ? "Following" : "Follow"}
       </Button>
     </>
   );

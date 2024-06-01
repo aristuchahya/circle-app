@@ -37,7 +37,13 @@ class UserController {
 
       if (!user) return res.status(404).json({ message: "User not found" });
 
-      const update = await userService.updateUser(Number(id), req.body);
+      const body = {
+        ...req.body,
+        photoProfile: req.file.path,
+      };
+
+      const update = await userService.updateUser(Number(id), body);
+
       res.status(201).json(update);
     } catch (error) {
       return error;

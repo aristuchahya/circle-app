@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { threadService } from "../services/threads-service";
+import { CreateThreadDto } from "../dto/threads-dto";
+import { AuthRequest } from "../middlewares/authenticate";
 
 class ThreadsController {
   async findAll(req: Request, res: Response) {
@@ -22,14 +24,18 @@ class ThreadsController {
     }
   }
 
-  async create(req: Request, res: Response) {
+  async create(req: AuthRequest, res: Response) {
     try {
       const body = {
         ...req.body,
         image: req.file.path,
       };
+      const userId = req.user?.id;
 
-      const createdThread = await threadService.createThread(body);
+      // const threadData: CreateThreadDto = ({ image: req.file.path } = req.body);
+
+      const createdThread = await threadService.createThread(body, userId);
+      console.log("createdThread result:", createdThread);
       res.status(201).json(createdThread);
     } catch (error) {
       return error;

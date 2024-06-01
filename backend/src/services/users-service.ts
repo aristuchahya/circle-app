@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { CreateUserDto, UpdateUserDto } from "../dto/users-dto";
+import { v2 as cloudinary } from "cloudinary";
+import { userschema } from "../validator/user";
 
 const prisma = new PrismaClient();
 
@@ -24,10 +26,24 @@ class UserService {
     }
   }
 
-  async createUser(createUserDto: CreateUserDto) {
+  async createUser(dto: CreateUserDto) {
     try {
+      const validate = userschema.validate(dto);
+      if (validate.error) {
+        return validate.error;
+      }
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+      });
+
+      const upload = await cloudinary.uploader.upload(dto.photoProfile, {
+        upload_preset: "circle-app",
+      });
+
       const user = await prisma.user.create({
-        data: createUserDto,
+        data: { ...dto, photoProfile: upload.secure_url },
       });
       return user;
     } catch (error) {
@@ -53,10 +69,25 @@ class UserService {
         user.photoProfile = dto.photoProfile;
       }
 
-      return await prisma.user.update({
-        where: { id: Number(id) },
-        data: { ...user },
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
       });
+
+      const upload = await cloudinary.uploader.upload(dto.photoProfile, {
+        upload_preset: "circle-app",
+      });
+
+      const userUpdate = await prisma.user.update({
+        where: { id: Number(id) },
+        data: {
+          ...user,
+          photoProfile: upload.secure_url,
+        },
+      });
+
+      return userUpdate;
     } catch (error) {
       return error;
     }

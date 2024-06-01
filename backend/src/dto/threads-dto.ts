@@ -1,4 +1,5 @@
 export type CreateThreadDto = {
+  createdBy?: number;
   content: string;
   image: string;
 };
