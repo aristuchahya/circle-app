@@ -10,6 +10,10 @@ class AuthService {
     try {
       const validate = registerschema.validate(dto);
 
+      if (validate.error) {
+        return validate.error;
+      }
+
       const salt = 10;
 
       const hashedPassword = await bcrypt.hash(dto.password, salt);
@@ -33,8 +37,17 @@ class AuthService {
         return validate.error;
       }
 
-      const user = await prisma.user.findUnique({
-        where: dto.email ? { email: dto.email } : { username: dto.username },
+      const user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            {
+              username: dto.usernameOrEmail,
+            },
+            {
+              email: dto.usernameOrEmail,
+            },
+          ],
+        },
       });
 
       if (!user) throw new Error("User Not Found");

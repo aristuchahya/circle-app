@@ -19,9 +19,12 @@ import { Follow } from "../Element/Button/follow";
 import { EditProfile } from "../Element/Button/edit";
 import { EditModal } from "../Element/Modal/edit-modal";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 export function RightBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   return (
     <>
@@ -46,9 +49,7 @@ export function RightBar() {
               position="relative"
               bottom="9"
               left="5"
-              src={
-                "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG1hbiUyMHByb2ZpbGV8ZW58MHx8MHx8fDA%3D"
-              }
+              src={currentUser.photoProfile}
             ></Avatar>
             <Flex justify="flex-end">
               <EditProfile fs="12" px="12" py="3" bottom="6" onClick={onOpen} />
@@ -56,13 +57,13 @@ export function RightBar() {
             </Flex>
             <Flex direction="column" position="relative" bottom="4">
               <Text color="white" fontSize="xl" fontWeight="semibold">
-                Aristu Chahya
+                {currentUser.fullName}
               </Text>
               <Text color="grey" fontSize="12" mb="2">
-                @arist
+                @{currentUser.username}
               </Text>
               <Text color="white" fontSize="12" fontWeight="medium">
-                Lorem ipsum dolor sit amet
+                {currentUser.bio}
               </Text>
               <HStack spacing={"2"}>
                 <Text color="white" fontSize="12">

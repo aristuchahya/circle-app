@@ -2,16 +2,15 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
 import { FormRegister } from "../../Components/Fragment/form-register";
 import { Link } from "react-router-dom";
+import { LogoCircle } from "../../Components/Element/Heading/logo-circle";
 
-export function Register() {
+function Register() {
   return (
     <>
       <Flex height="100vh" alignItems={"center"} justifyContent={"center"}>
         <Box m="auto">
-          <Heading color="#04A51E" ms="3" fontSize="4xl">
-            circle
-          </Heading>
-          <Heading color="white" fontSize="xl" ms="3">
+          <LogoCircle width={"100px"} ms={"3"} mb={"3"} />
+          <Heading color="white" fontSize="2xl" ms="3">
             Create account Circle
           </Heading>
           <FormRegister />
@@ -26,3 +25,5 @@ export function Register() {
     </>
   );
 }
+
+export default Register;

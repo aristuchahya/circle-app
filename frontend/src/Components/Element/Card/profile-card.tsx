@@ -17,10 +17,13 @@ import { ThreadProps } from "./card";
 import { HeadProfile } from "../Heading/head-profile";
 import { EditProfile } from "../Button/edit";
 import { EditModal } from "../Modal/edit-modal";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 
 export function ProfileCard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [activeLink, setActiveLink] = useState("");
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   const handleLinkClick = (link: string) => {
     setActiveLink(link);
@@ -40,7 +43,7 @@ export function ProfileCard() {
     <>
       <Box maxW="2xl" m="5" ms="6">
         <Heading fontSize="2xl">
-          <Icon as={FaArrowLeftLong} pt="2" /> Aristu Chahya
+          <Icon as={FaArrowLeftLong} pt="2" /> {currentUser.fullName}
         </Heading>
         <Box>
           <HeadProfile />
@@ -50,12 +53,12 @@ export function ProfileCard() {
           <EditModal isOpen={isOpen} onClose={onClose} />
         </Box>
 
-        <Heading fontSize="xl">Aristu Chahya</Heading>
+        <Heading fontSize="xl">{currentUser.fullName}</Heading>
         <Text color="grey" fontSize="14" mb="2">
-          @arist
+          @{currentUser.username}
         </Text>
         <Text fontSize="14" fontWeight="medium">
-          Lorem ipsum dolor sit amet
+          {currentUser.bio}
         </Text>
         <HStack spacing={"2"}>
           <Text fontSize="12">290</Text>

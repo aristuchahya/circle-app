@@ -1,4 +1,4 @@
-export type UserJWT = {
+export type UserJWTPayloads = {
   id: number;
   fullName: string;
   username: string;

@@ -11,6 +11,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Stack,
+  Textarea,
 } from "@chakra-ui/react";
 import { PostModalProps } from "./post-modal";
 import { HeadProfile } from "../Heading/head-profile";
@@ -52,16 +53,13 @@ export function EditModal({ isOpen, onClose }: PostModalProps) {
                 />
               </Stack>
               <Stack>
-                <FormLabel color="grey" fontSize="12">
+                <FormLabel color="grey" fontSize="12" mb={"0"}>
                   Bio
                 </FormLabel>
-                <Input
-                  color="white"
-                  placeholder=""
-                  border={"1px solid grey"}
-                  position={"relative"}
-                  bottom="3"
-                  height="100px"
+                <Textarea
+                  resize={"none"}
+                  color={"white"}
+                  placeholder="Enter your bio"
                 />
               </Stack>
               <Divider />

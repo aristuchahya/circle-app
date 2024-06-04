@@ -1,33 +1,13 @@
-import { Input } from "@chakra-ui/react";
+import { Input, InputProps } from "@chakra-ui/react";
 
-interface InputProps {
-  type: string;
+interface InputType extends InputProps {
   name: string;
-  placeholder: string;
-  width: string;
-  border?: string;
 }
 
-export function InputForm({
-  type,
-  placeholder,
-  name,
-  width,
-  border,
-}: InputProps) {
+export function InputForm(props: InputType) {
   return (
     <>
-      <Input
-        type={type}
-        placeholder={placeholder}
-        name={name}
-        size="md"
-        width={width}
-        border={border}
-        variant="outline"
-        mb="1"
-        isRequired
-      />
+      <Input size="md" variant="outline" mb="1" isRequired {...props} />
     </>
   );
 }

@@ -1,6 +1,7 @@
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 
-export function CreatePost() {
+interface ButtonPostProps extends ButtonProps {}
+export function CreatePost(props: ButtonPostProps) {
   return (
     <>
       <Button
@@ -12,6 +13,7 @@ export function CreatePost() {
         rounded="15"
         mt="10"
         _hover={{ bg: "white", color: "green" }}
+        {...props}
       >
         Create Post
       </Button>

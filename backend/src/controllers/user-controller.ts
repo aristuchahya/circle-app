@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { userService } from "../services/users-service";
+import { CreateFollowDto } from "../dto/follows-dto";
 
 class UserController {
   async getAllUsers(req: Request, res: Response) {
@@ -62,6 +63,74 @@ class UserController {
       return error;
     }
   }
+
+  // async followStatus(req: Request, res: Response) {
+  //   try {
+  //     const user = res.locals.user;
+
+  //     if (!user) return res.status(404).json({ message: "User not found" });
+
+  //     const result = await userService.find(user);
+  //     res.status(201).json({ message: "find follows", result });
+  //   } catch (error) {
+  //     return res.status(500).json({ message: "Internal server error" });
+  //   }
+  // }
+
+  async follow(req: Request, res: Response) {
+    try {
+      const user = res.locals.user;
+      const body = {
+        ...req.body,
+        followerId: user.id,
+      };
+      // const dto: CreateFollowDto = {
+      //   followerId: user.id,
+      //   followingId: req.body.followingId,
+      // };
+
+      // if (typeof followingId !== 'number') {
+      //   return res
+      //     .status(400)
+      //     .json({ message: "Follower ID and Followed user ID are required" });
+      // }
+
+      const result = await userService.followUser(body);
+      return res.status(200).json({ message: "success", result });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  async isFollow(req: Request, res: Response) {
+    const { followingId } = req.params;
+    const followerId = res.locals.user.id;
+    console.log("user :", followerId);
+    console.log("user 2 :", followingId);
+
+    if (!followingId)
+      return res.status(400).json({ message: "Followed user ID is required" });
+
+    try {
+      const status = await userService.isFollowing(
+        followerId,
+        Number(followingId)
+      );
+      res.status(200).json({ isfollowing: status });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+
+  // async allFollowStatus(req: Request, res: Response) {
+  //   const followerId = res.locals.user.id;
+  //   try {
+  //     const user = await userService.getAllStatus(followerId);
+  //     res.status(200).json({ message: "success", user });
+  //   } catch (error) {
+  //     res.status(400).json({ message: error.message });
+  //   }
+  // }
 }
 
 export const userController = new UserController();

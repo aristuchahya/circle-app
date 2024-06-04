@@ -39,8 +39,11 @@ model Thread {
   content String
   image   String
 
-  numberOfReplies Int?
+  numberOfReplies Int?   @default(0)
   Reply           Reply? @relation("UserReply", fields: [numberOfReplies], references: [id])
+
+  numberOfLikes Int?  @default(0)
+  Like          Like? @relation("UserLike", fields: [numberOfLikes], references: [id])
 
   createdBy Int
   created   User @relation("CreatedBy", fields: [createdBy], references: [id])
@@ -57,11 +60,13 @@ model Thread {
 model Like {
   id Int @id @default(autoincrement())
 
-  User   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  User   User @relation(fields: [userId], references: [id])
+  userId Int
 
-  Thread   Thread? @relation(fields: [threadId], references: [id])
-  threadId Int?
+  Thread   Thread @relation(fields: [threadId], references: [id])
+  threadId Int
+
+  threads Thread[] @relation("UserLike")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -72,10 +77,10 @@ model Like {
 model Reply {
   id Int @id @default(autoincrement())
 
-  User     User?   @relation(fields: [userId], references: [id])
-  userId   Int?
-  Thread   Thread? @relation(fields: [threadId], references: [id])
-  threadId Int?
+  User     User   @relation(fields: [userId], references: [id])
+  userId   Int
+  Thread   Thread @relation(fields: [threadId], references: [id])
+  threadId Int
 
   threads Thread[] @relation("UserReply")
 
@@ -95,5 +100,6 @@ model Following {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
+  @@unique([followingId, followerId])
   @@map("following")
 }

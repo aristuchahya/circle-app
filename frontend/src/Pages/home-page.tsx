@@ -5,7 +5,7 @@ import { RightBar } from "../Components/Sidebar/right-bar";
 import { useEffect, useState } from "react";
 import "../index.css";
 
-export function Home() {
+function Home() {
   const [users, setUsers] = useState<ThreadProps[]>([]);
 
   useEffect(() => {
@@ -44,3 +44,5 @@ export function Home() {
     </div>
   );
 }
+
+export default Home;

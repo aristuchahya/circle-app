@@ -20,6 +20,7 @@ class ThreadSevice {
     try {
       const thread = await prisma.thread.findFirst({
         where: { id },
+        include: { created: true },
       });
       if (!thread) return null;
 

@@ -36,6 +36,27 @@ class FollowService {
 
   async getFollowers(userId: number) {
     try {
-    } catch (error) {}
+      const followers = await prisma.following.findMany({
+        where: { followingId: userId },
+        include: { follower: true },
+      });
+      return followers;
+    } catch (error) {
+      console.error("Error get followers", error);
+      throw new Error("Could find follower");
+    }
+  }
+
+  async getFollowing(userId: number) {
+    try {
+      const following = await prisma.following.findMany({
+        where: { followerId: userId },
+        include: { following: true },
+      });
+      return following;
+    } catch (error) {
+      console.error("Error get following", error);
+      throw new Error("Could find following");
+    }
   }
 }

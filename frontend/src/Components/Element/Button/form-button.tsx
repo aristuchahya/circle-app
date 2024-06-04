@@ -1,23 +1,19 @@
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 
-interface BtnProps {
-  children: string;
-}
+interface BtnProps extends ButtonProps {}
 
-export function FormButton({ children }: BtnProps) {
+export function FormButton(props: BtnProps) {
   return (
     <>
       <Button
-        type="submit"
         bgColor="green"
         size="md"
         width="80"
         color="white"
         rounded="15"
         _hover={{ bg: "white", color: "green" }}
-      >
-        {children}
-      </Button>
+        {...props}
+      ></Button>
     </>
   );
 }

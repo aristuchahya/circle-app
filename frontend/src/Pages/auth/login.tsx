@@ -2,16 +2,15 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
 import { FormLogin } from "../../Components/Fragment/form-login";
 import { Link } from "react-router-dom";
+import { LogoCircle } from "../../Components/Element/Heading/logo-circle";
 
-export function Login() {
+function Login() {
   return (
     <div>
       <Flex height="100vh" alignItems={"center"} justifyContent={"center"}>
         <Box m="auto">
-          <Heading color="#04A51E" ms="3" fontSize="4xl">
-            circle
-          </Heading>
-          <Heading color="white" fontSize="28px" ms="3" fontWeight="700">
+          <LogoCircle width={"100px"} ms={"3"} mb={"3"} />
+          <Heading color="white" fontSize="26px" ms="3" fontWeight="700">
             Login to Circle
           </Heading>
           <FormLogin />
@@ -32,3 +31,5 @@ export function Login() {
     </div>
   );
 }
+
+export default Login;

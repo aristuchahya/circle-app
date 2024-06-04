@@ -11,13 +11,13 @@ import {
   Spacer,
   Input,
   HStack,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { LuImagePlus } from "react-icons/lu";
 import { TfiCommentAlt } from "react-icons/tfi";
 import { Post } from "../Button/post";
-import { PostModal } from "../Modal/post-modal";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 
 export interface ThreadProps {
   id?: number;
@@ -31,7 +31,7 @@ export interface ThreadProps {
 }
 
 export function Head() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const currentUser = useSelector((state: RootState) => state.auth.user);
   return (
     <>
       <Box m={"5"}>
@@ -39,7 +39,7 @@ export function Head() {
           Home
         </Heading>
         <Flex>
-          <Avatar size={"sm"} mb="2">
+          <Avatar size={"sm"} mb="2" src={currentUser.photoProfile}>
             <AvatarBadge boxSize="1em" bg="green.500" />
           </Avatar>
           <Input
@@ -49,12 +49,11 @@ export function Head() {
           ></Input>
           <Spacer />
           <Icon color={"green"} mt="2" me="1" boxSize="5" as={LuImagePlus} />
-          <Post mt="2" fs="12" onclick={onOpen}>
+          <Post mt="2" fs="12">
             Post
           </Post>
         </Flex>
         <Divider />
-        <PostModal isOpen={isOpen} onClose={onClose} />
       </Box>
     </>
   );
