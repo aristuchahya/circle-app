@@ -48,7 +48,7 @@ export function ProfileCard() {
         <Box>
           <HeadProfile />
           <Flex justify={"end"} position={"relative"} bottom="10">
-            <EditProfile fs="12" px="12" py="3" onClick={onOpen} />
+            <EditProfile fontSize="12" px="12" py="3" onClick={onOpen} />
           </Flex>
           <EditModal isOpen={isOpen} onClose={onClose} />
         </Box>

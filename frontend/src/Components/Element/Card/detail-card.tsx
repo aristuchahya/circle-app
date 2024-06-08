@@ -17,21 +17,20 @@ import { TfiCommentAlt } from "react-icons/tfi";
 import { InputForm } from "../input/input";
 import { LuImagePlus } from "react-icons/lu";
 import { Post } from "../Button/post";
-import { ThreadProps } from "./card";
-import { useEffect, useState } from "react";
+
 import { PostCard } from "./post-card";
 
 export function DetailCard() {
-  const [users, setUsers] = useState<ThreadProps[]>([]);
+  // const [users, setUsers] = useState<ThreadProps[]>([]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch("/data.json");
-      const data: ThreadProps[] = await response.json();
-      setUsers(data);
-    };
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const response = await fetch("/data.json");
+  //     const data: ThreadProps[] = await response.json();
+  //     setUsers(data);
+  //   };
+  //   fetchUsers();
+  // }, []);
 
   return (
     <>
@@ -99,10 +98,11 @@ export function DetailCard() {
           />
           <Spacer />
           <Icon color={"green"} me="1" boxSize="5" as={LuImagePlus} />
-          <Post fs="12">Reply</Post>
+          <Post fontSize="12">Reply</Post>
         </HStack>
         <Divider />
-        {users.map((user) => (
+        <PostCard />
+        {/* {users.map((user) => (
           <PostCard
             key={user.id}
             name={user.name}
@@ -113,7 +113,7 @@ export function DetailCard() {
             like={user.like}
             comment={user.comment}
           />
-        ))}
+        ))} */}
       </Box>
     </>
   );

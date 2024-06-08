@@ -6,13 +6,12 @@ import {
   ListItem,
   useDisclosure,
 } from "@chakra-ui/react";
-
-import { CreatePost } from "../Element/Button/post";
+import { LogoCircle } from "../../../Components/Element/Heading/logo-circle";
+import { ListBar } from "../../../Components/List-Menu/list-bar";
+import { CreatePost } from "../../../Components/Element/Button/post";
+import { PostModal } from "../../../Components/Element/Modal/post-modal";
 import { SlLogout } from "react-icons/sl";
-import { ListBar } from "../List-Menu/list-bar";
-import { useLogout } from "../Element/Button/logout";
-import { LogoCircle } from "../Element/Heading/logo-circle";
-import { PostModal } from "../Element/Modal/post-modal";
+import { useLogout } from "../../../Components/Element/Button/logout";
 
 export function Sidebar() {
   const { isOpen, onOpen, onClose } = useDisclosure();

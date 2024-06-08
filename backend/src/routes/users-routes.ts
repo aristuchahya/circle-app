@@ -13,17 +13,17 @@ const router = Router();
 router.get("/users", authenticate, userController.getAllUsers);
 router.get("/users/:id", authenticate, userController.getUserById);
 router.post("/users", userController.createUser);
-router.put(
+router.patch(
   "/users/:id",
   authenticate,
   upload.single("photoProfile"),
   userController.updateUser
 );
 router.delete("/users/:id", authenticate, userController.deleteUser);
-// router.get("/users/follow", authenticate, userController.allFollowStatus);
+
 router.post("/users/follow", authenticate, userController.follow);
 router.get("/users/follow/:followingId", authenticate, userController.isFollow);
-
+router.get("/follows", authenticate, userController.findFollow);
 //auth
 router.post("/auth/login", authController.login);
 router.post("/auth/register", authController.register);
@@ -38,7 +38,7 @@ router.post(
   upload.single("image"),
   threadController.create
 );
-router.put(
+router.patch(
   "/threads/:id",
   authenticate,
   upload.single("image"),

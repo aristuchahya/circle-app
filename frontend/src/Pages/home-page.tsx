@@ -1,30 +1,52 @@
-import { Divider, Flex, Spacer } from "@chakra-ui/react";
-import { Head, ThreadCard, ThreadProps } from "../Components/Element/Card/card";
-import { Sidebar } from "../Components/Sidebar/side-bar";
-import { RightBar } from "../Components/Sidebar/right-bar";
-import { useEffect, useState } from "react";
+import { Box, Divider, Flex, Spacer } from "@chakra-ui/react";
+import { Head } from "../Components/Element/Card/card";
+
+import { RightBar } from "../features/home/components/right-bar";
+
 import "../index.css";
+import { Sidebar } from "../features/home/components/side-bar";
+
+import { HomeThreads } from "../features/home/components/home-threads";
+
+import { useHomePage } from "../features/home/hook/use-home";
 
 function Home() {
-  const [users, setUsers] = useState<ThreadProps[]>([]);
+  const { threads } = useHomePage();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch("/data.json");
-      const data: ThreadProps[] = await response.json();
-      setUsers(data);
-    };
-    fetchUsers();
-  }, []);
+  console.log("Home threads:", threads);
   return (
     <div>
-      <Flex gap="5">
+      <Box display={"flex"} gap={"2"}>
         <Sidebar />
         <Divider orientation="vertical" />
         <Spacer />
         <Flex direction="column" gap="2">
           <Head />
-          {users.map((user) => (
+          <Box>
+            {threads?.map((thread) => (
+              <HomeThreads key={thread.id} thread={thread} />
+            ))}
+          </Box>
+        </Flex>
+        <Divider orientation="vertical" />
+        <Spacer />
+        <RightBar />
+      </Box>
+    </div>
+  );
+}
+
+export default Home;
+
+{
+  /* {Array.isArray(threads) ? (
+                threads.map((thread) => <HomeThreads thread={thread} />)
+              ) : (
+                <div>Loading...</div>
+              )} */
+}
+{
+  /* {users.map((user) => (
             <ThreadCard
               key={user.id}
               name={user.name}
@@ -35,14 +57,5 @@ function Home() {
               like={user.like}
               comment={user.comment}
             />
-          ))}
-        </Flex>
-        <Divider orientation="vertical" />
-        <Spacer />
-        <RightBar />
-      </Flex>
-    </div>
-  );
+          ))} */
 }
-
-export default Home;

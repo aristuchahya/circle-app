@@ -19,14 +19,14 @@ class AuthService {
       const hashedPassword = await bcrypt.hash(dto.password, salt);
       dto.password = hashedPassword;
       if (validate.error) {
-        return validate.error;
+        throw new Error(validate.error.message);
       }
 
       return await prisma.user.create({
         data: { ...dto },
       });
     } catch (error) {
-      return error;
+      throw new Error(error.message || "Failed to register");
     }
   }
 
@@ -34,7 +34,7 @@ class AuthService {
     try {
       const validate = loginschema.validate(dto);
       if (validate.error) {
-        return validate.error;
+        throw new Error(validate.error.message);
       }
 
       const user = await prisma.user.findFirst({
@@ -62,7 +62,7 @@ class AuthService {
 
       return { user, token };
     } catch (error) {
-      return { error: error.message };
+      throw new Error(error.message || "Failed to login");
     }
   }
 }

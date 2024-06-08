@@ -12,11 +12,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import { api } from "./libs/api";
 import { setUser } from "./redux/slices/auth";
+import { useToast } from "@chakra-ui/react";
 
 function App() {
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const PrivateRoute = () => {
     if (!isLogin) {
@@ -43,6 +45,12 @@ function App() {
     } catch (error) {
       localStorage.removeItem("token");
       setIsLogin(false);
+      toast({
+        title: "User not authenticated!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   }
 

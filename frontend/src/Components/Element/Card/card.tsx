@@ -1,8 +1,5 @@
 import {
-  Text,
-  Image,
   Divider,
-  Flex,
   Avatar,
   AvatarBadge,
   Icon,
@@ -10,99 +7,79 @@ import {
   Heading,
   Spacer,
   Input,
-  HStack,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  Textarea,
 } from "@chakra-ui/react";
-import { CiHeart } from "react-icons/ci";
+
 import { LuImagePlus } from "react-icons/lu";
-import { TfiCommentAlt } from "react-icons/tfi";
+
 import { Post } from "../Button/post";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
-
-export interface ThreadProps {
-  id?: number;
-  name: string;
-  username: string;
-  avatar: string;
-  image?: string;
-  post?: string;
-  like: number;
-  comment: number;
-}
+import { useHomePage } from "../../../features/home/hook/use-home";
+import { ProcessModal } from "../Modal/process-modal";
 
 export function Head() {
   const currentUser = useSelector((state: RootState) => state.auth.user);
+  const { register, handleSubmit, onSubmit, errors, isOpen, onClose } =
+    useHomePage();
+
   return (
     <>
-      <Box m={"5"}>
+      <Box m={"5"} maxWidth="xl">
         <Heading fontSize="xl" mb="5" fontWeight="medium">
           Home
         </Heading>
-        <Flex>
-          <Avatar size={"sm"} mb="2" src={currentUser.photoProfile}>
+        <Box display="flex">
+          <Avatar size={"md"} mb="2" src={currentUser.photoProfile}>
             <AvatarBadge boxSize="1em" bg="green.500" />
           </Avatar>
-          <Input
-            placeholder=" What is happening?!.."
-            size="sm"
-            border="none"
-          ></Input>
-          <Spacer />
-          <Icon color={"green"} mt="2" me="1" boxSize="5" as={LuImagePlus} />
-          <Post mt="2" fs="12">
-            Post
-          </Post>
-        </Flex>
-        <Divider />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControl mb="2" isInvalid={!!errors.content}>
+              <Textarea
+                placeholder=" What is happening?!.."
+                width="20em"
+                height="10"
+                resize="none"
+                border="none"
+                mt="3"
+                {...register("content")}
+              />
+              <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
+            </FormControl>
+            <Spacer />
+            <Box display={"flex"} position="relative" left="20em" bottom="6em">
+              <FormLabel htmlFor="upload-file" cursor={"pointer"}>
+                <Icon
+                  color={"green"}
+                  mt="4"
+                  me="1"
+                  boxSize="5"
+                  as={LuImagePlus}
+                />
+              </FormLabel>
+              <Post type="submit" mt="4" fontSize="12">
+                Post
+              </Post>
+            </Box>
+
+            <FormControl isInvalid={!!errors.image}>
+              <Input
+                type="file"
+                id="upload-file"
+                display="none"
+                hidden
+                accept="image/*"
+                {...register("image")}
+              />
+            </FormControl>
+          </form>
+          <ProcessModal isOpen={isOpen} onClose={onClose} />
+        </Box>
+        <Divider position="relative" bottom="14" />
       </Box>
     </>
-  );
-}
-export function ThreadCard({
-  name,
-  username,
-  image,
-  post,
-  avatar,
-  like,
-  comment,
-}: ThreadProps) {
-  return (
-    <div>
-      <Box m="5" mt="2" maxW="xl">
-        <Flex mt="3">
-          <Avatar size={"sm"} src={avatar}>
-            <AvatarBadge boxSize="1em" bg="green.500" />
-          </Avatar>
-          <Text color={"white"} pt={"1"} size="sm" ps="3">
-            {name}
-          </Text>
-          <Text color={"grey"} pt={"1"} ps="2">
-            {username}
-          </Text>
-        </Flex>
-        <Text color="white" ms="10" my="3" fontSize="14" textAlign="justify">
-          {post}
-        </Text>
-        <Image src={image} borderRadius="lg" ms="10" />
-        <HStack mb="3" ms="5">
-          <Icon as={CiHeart} color={"white"} mt="3" ms="4" boxSize={"5"} />
-          <Text mt="3" position="relative" right="2" fontSize="12">
-            {like}
-          </Text>
-          <Icon
-            as={TfiCommentAlt}
-            color={"white"}
-            mt="3"
-            boxSize={"3"}
-            ms="4"
-          />
-          <Text mt="3" position="relative" right="1" fontSize="12">
-            {comment} replies
-          </Text>
-        </HStack>
-        <Divider />
-      </Box>
-    </div>
   );
 }

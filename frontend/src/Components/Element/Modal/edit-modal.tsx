@@ -29,42 +29,48 @@ export function EditModal({ isOpen, onClose }: PostModalProps) {
             <HeadProfile />
             <FormControl>
               <Stack>
-                <FormLabel color="grey" fontSize="12">
-                  Name
-                </FormLabel>
-                <Input
-                  color="white"
-                  placeholder="Enter your name"
-                  border={"1px solid grey"}
-                  position={"relative"}
-                  bottom="3"
-                />
+                <FormControl>
+                  <FormLabel color="grey" fontSize="12">
+                    Name
+                  </FormLabel>
+                  <Input
+                    color="white"
+                    placeholder="Enter your name"
+                    border={"1px solid grey"}
+                    position={"relative"}
+                    bottom="3"
+                  />
+                </FormControl>
               </Stack>
               <Stack>
-                <FormLabel color="grey" fontSize="12">
-                  username
-                </FormLabel>
-                <Input
-                  color="white"
-                  placeholder="Enter your username"
-                  border={"1px solid grey"}
-                  position={"relative"}
-                  bottom="3"
-                />
+                <FormControl>
+                  <FormLabel color="grey" fontSize="12">
+                    username
+                  </FormLabel>
+                  <Input
+                    color="white"
+                    placeholder="Enter your username"
+                    border={"1px solid grey"}
+                    position={"relative"}
+                    bottom="3"
+                  />
+                </FormControl>
               </Stack>
               <Stack>
-                <FormLabel color="grey" fontSize="12" mb={"0"}>
-                  Bio
-                </FormLabel>
-                <Textarea
-                  resize={"none"}
-                  color={"white"}
-                  placeholder="Enter your bio"
-                />
+                <FormControl>
+                  <FormLabel color="grey" fontSize="12" mb={"0"}>
+                    Bio
+                  </FormLabel>
+                  <Textarea
+                    resize={"none"}
+                    color={"white"}
+                    placeholder="Enter your bio"
+                  />
+                </FormControl>
               </Stack>
               <Divider />
               <Flex justify={"flex-end"} mt="2">
-                <Post fs="14">Save</Post>
+                <Post fontSize="14">Save</Post>
               </Flex>
             </FormControl>
           </ModalBody>

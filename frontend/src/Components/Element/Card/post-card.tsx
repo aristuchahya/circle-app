@@ -11,39 +11,30 @@ import {
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { TfiCommentAlt } from "react-icons/tfi";
-import { ThreadProps } from "./card";
 
-export function PostCard({
-  name,
-  username,
-  avatar,
-  image,
-  post,
-  like,
-  comment,
-}: ThreadProps) {
+export function PostCard() {
   return (
     <>
       <Box>
         <Flex mt="3">
-          <Avatar size={"sm"} src={avatar}>
+          <Avatar size={"sm"} src="">
             <AvatarBadge boxSize="1em" bg="green.500" />
           </Avatar>
           <Text color={"white"} pt={"1"} size="sm" ps="3">
-            {name}
+            aristu
           </Text>
           <Text color={"grey"} pt={"1"} ps="2">
-            {username}
+            @arist
           </Text>
         </Flex>
         <Text color="white" ms="10" my="3" fontSize="14" textAlign="justify">
-          {post}
+          content
         </Text>
-        <Image src={image} borderRadius="lg" ms="10" />
+        <Image src="" borderRadius="lg" ms="10" />
         <HStack mb="3" ms="10">
           <Icon as={CiHeart} color={"white"} mt="3" ms="4" boxSize={"5"} />
           <Text mt="3" position="relative" right="2" fontSize="12">
-            {like}
+            30
           </Text>
           <Icon
             as={TfiCommentAlt}
@@ -53,7 +44,7 @@ export function PostCard({
             ms="4"
           />
           <Text mt="3" position="relative" right="1" fontSize="12">
-            {comment} replies
+            100 replies
           </Text>
         </HStack>
         <Divider />

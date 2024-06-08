@@ -7,7 +7,7 @@
   margin: 0;
 }
 
-.scrollable {
+/* .scrollable {
   overflow-y: auto;
   height: 100vh;
 }
@@ -28,4 +28,4 @@
 
 .scrollable::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
+} */

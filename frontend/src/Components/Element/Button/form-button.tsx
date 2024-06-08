@@ -6,6 +6,7 @@ export function FormButton(props: BtnProps) {
   return (
     <>
       <Button
+        type="submit"
         bgColor="green"
         size="md"
         width="80"

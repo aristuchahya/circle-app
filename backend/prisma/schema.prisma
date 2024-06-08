@@ -39,11 +39,11 @@ model Thread {
   content String
   image   String
 
-  numberOfReplies Int?   @default(0)
-  Reply           Reply? @relation("UserReply", fields: [numberOfReplies], references: [id])
+  numberOfReplies Int? @default(0)
+  // Reply           Reply? @relation("UserReply", fields: [numberOfReplies], references: [id])
 
-  numberOfLikes Int?  @default(0)
-  Like          Like? @relation("UserLike", fields: [numberOfLikes], references: [id])
+  numberOfLikes Int? @default(0)
+  // Like          Like? @relation("UserLike", fields: [numberOfLikes], references: [id])
 
   createdBy Int
   created   User @relation("CreatedBy", fields: [createdBy], references: [id])
@@ -66,7 +66,7 @@ model Like {
   Thread   Thread @relation(fields: [threadId], references: [id])
   threadId Int
 
-  threads Thread[] @relation("UserLike")
+  // threads Thread[] @relation("UserLike")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -82,7 +82,7 @@ model Reply {
   Thread   Thread @relation(fields: [threadId], references: [id])
   threadId Int
 
-  threads Thread[] @relation("UserReply")
+  // threads Thread[] @relation("UserReply")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

@@ -1,8 +1,8 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
-import { FormRegister } from "../../Components/Fragment/form-register";
 import { Link } from "react-router-dom";
 import { LogoCircle } from "../../Components/Element/Heading/logo-circle";
+import { FormRegister } from "../../features/auth-register/components/form-register";
 
 function Register() {
   return (

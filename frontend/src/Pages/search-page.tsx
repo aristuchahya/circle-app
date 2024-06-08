@@ -1,7 +1,8 @@
 import { Divider, Flex, Spacer } from "@chakra-ui/react";
-import { Sidebar } from "../Components/Sidebar/side-bar";
+
 import { SearchCard } from "../Components/Element/Card/search-card";
-import { RightBar } from "../Components/Sidebar/right-bar";
+import { RightBar } from "../features/home/components/right-bar";
+import { Sidebar } from "../features/home/components/side-bar";
 
 function SearchPage() {
   return (

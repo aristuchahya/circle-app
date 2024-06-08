@@ -21,31 +21,20 @@ export function CreatePost(props: ButtonPostProps) {
   );
 }
 
-interface PostProps {
-  children: string;
-  mt?: string;
-  fs?: string;
-
-  onclick?: () => void;
-}
-export function Post({ children, mt, fs, onclick }: PostProps) {
+interface PostProps extends ButtonProps {}
+export function Post(props: PostProps) {
   return (
     <>
       <Button
-        mt={mt}
+        {...props}
         rounded="15"
         ps="7"
         pe="7"
         boxSize="5"
-        fontSize={fs}
         bg="#04A51E"
         color="white"
-        position={"relative"}
-        onClick={onclick}
         _hover={{ bg: "white", color: "green" }}
-      >
-        {children}
-      </Button>
+      ></Button>
     </>
   );
 }

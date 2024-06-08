@@ -14,13 +14,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { FaFacebook, FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
-import { Follow } from "../Element/Button/follow";
+import { Follow } from "../../../Components/Element/Button/follow";
 
-import { EditProfile } from "../Element/Button/edit";
-import { EditModal } from "../Element/Modal/edit-modal";
+import { EditProfile } from "../../../Components/Element/Button/edit";
+import { EditModal } from "../../../Components/Element/Modal/edit-modal";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../../redux/store";
 
 export function RightBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,7 +52,13 @@ export function RightBar() {
               src={currentUser.photoProfile}
             ></Avatar>
             <Flex justify="flex-end">
-              <EditProfile fs="12" px="12" py="3" bottom="6" onClick={onOpen} />
+              <EditProfile
+                fontSize="12"
+                px="12"
+                py="3"
+                bottom="6"
+                onClick={onOpen}
+              />
               <EditModal isOpen={isOpen} onClose={onClose} />
             </Flex>
             <Flex direction="column" position="relative" bottom="4">

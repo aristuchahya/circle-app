@@ -9,10 +9,20 @@ class ThreadSevice {
   async getAllThreads() {
     try {
       return await prisma.thread.findMany({
-        include: { created: true },
+        include: {
+          created: {
+            select: {
+              id: true,
+              username: true,
+              fullName: true,
+              photoProfile: true,
+              createdAt: true,
+            },
+          },
+        },
       });
     } catch (error) {
-      return error;
+      throw new Error(error.message || "Could not find all thread");
     }
   }
 
@@ -20,17 +30,19 @@ class ThreadSevice {
     try {
       const thread = await prisma.thread.findFirst({
         where: { id },
-        include: { created: true },
+        include: {
+          created: { select: { id: true, username: true, createdAt: true } },
+        },
       });
       if (!thread) return null;
 
       return thread;
     } catch (error) {
-      return error;
+      throw new Error(error.message || "Could not find thread");
     }
   }
 
-  async createThread(dto: CreateThreadDto) {
+  async createThread(dto: CreateThreadDto, createdBy: number) {
     try {
       const validate = createthreadschema.validate(dto);
       if (validate.error) {
@@ -48,13 +60,13 @@ class ThreadSevice {
       });
 
       const thread = await prisma.thread.create({
-        data: { ...dto, image: upload.secure_url },
+        data: { ...dto, createdBy, image: upload.secure_url },
       });
       console.log("thread result:", thread);
 
       return thread;
     } catch (error) {
-      return error;
+      throw new Error(error.message || "Could not find thread");
     }
   }
 

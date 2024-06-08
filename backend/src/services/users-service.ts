@@ -4,7 +4,6 @@ import { v2 as cloudinary } from "cloudinary";
 import { userschema } from "../validator/user";
 import { UserJWTPayloads } from "../types/auth";
 import { CreateFollowDto } from "../dto/follows-dto";
-import { when } from "joi";
 
 const prisma = new PrismaClient();
 
@@ -106,28 +105,6 @@ class UserService {
     }
   }
 
-  async find(user: UserJWTPayloads) {
-    try {
-      const users = await prisma.user.findMany();
-
-      const follows = await prisma.following.findMany({
-        where: { followerId: user.id },
-      });
-
-      const followIds = new Set(follows.map((follow) => follow.followingId));
-
-      return users.map((user) => {
-        return {
-          ...user,
-          isFollowing: followIds.has(user.id),
-        };
-      });
-    } catch (error) {
-      console.error("Error retrieving users with follow status:", error);
-      throw new Error("Could not retrieve users with follow status");
-    }
-  }
-
   async followUser(dto: CreateFollowDto) {
     const { followerId, followingId } = dto;
     if (followerId === followingId)
@@ -164,6 +141,27 @@ class UserService {
       return follow !== null;
     } catch (error) {
       throw new Error(`Failed to check follow status: ${error.message}`);
+    }
+  }
+
+  async findFollow(user: UserJWTPayloads) {
+    try {
+      const users = await prisma.user.findMany();
+
+      const follows = await prisma.following.findMany({
+        where: {
+          followerId: user.id,
+        },
+      });
+
+      return users.map((u) => {
+        const isFollowing = follows.some(
+          (follow) => follow.followingId === u.id
+        );
+        return { ...u, isFollowing };
+      });
+    } catch (error) {
+      throw new Error(error.message || "Failed to retrieve users");
     }
   }
 

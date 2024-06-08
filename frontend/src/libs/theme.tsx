@@ -1,10 +1,17 @@
 import { extendTheme } from "@chakra-ui/react";
 
-const theme = extendTheme({
+const font = {
   fonts: {
     heading: `'Plus Jakarta Sans', san-serif`,
     body: `'Plus Jakarta Sans', san-serif`,
   },
-});
+};
 
-export default theme;
+const colors = {
+  brand: {
+    primary: "#04A51E",
+    secondary: "#005E0E",
+  },
+};
+
+export const theme = extendTheme({ font, colors });

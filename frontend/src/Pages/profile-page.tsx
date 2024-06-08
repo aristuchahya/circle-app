@@ -1,9 +1,10 @@
 import { Box, Divider, Flex, Spacer } from "@chakra-ui/react";
-import { Sidebar } from "../Components/Sidebar/side-bar";
+
 import { ProfileCard } from "../Components/Element/Card/profile-card";
 
 import { Suggested } from "../Components/Element/Card/suggest-card";
 import { Developed } from "../Components/Element/Card/develope-card";
+import { Sidebar } from "../features/home/components/side-bar";
 
 function ProfilePage() {
   return (

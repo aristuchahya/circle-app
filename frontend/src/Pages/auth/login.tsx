@@ -1,8 +1,8 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
-import { FormLogin } from "../../Components/Fragment/form-login";
 import { Link } from "react-router-dom";
 import { LogoCircle } from "../../Components/Element/Heading/logo-circle";
+import { FormLogin } from "../../features/auth-login/component/form-login";
 
 function Login() {
   return (
