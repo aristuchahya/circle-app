@@ -110,14 +110,6 @@ class UserService {
     if (followerId === followingId)
       throw new Error("user cannot follow themselves");
     try {
-      // const existingFollow = await prisma.following.findUnique({
-      //   where: { followingId_followerId: { followingId, followerId } },
-      // });
-
-      // if (existingFollow) {
-      //   throw new Error("Already following this user");
-      // }
-
       const follow = await prisma.following.create({
         data: { ...dto },
       });
@@ -165,41 +157,38 @@ class UserService {
     }
   }
 
-  // async getAllStatus(followerId: number) {
-  //   try {
-  //     const users = await prisma.user.findMany({
-  //       select: {
-  //         id: true,
-  //         fullName: true,
-  //         following: {
-  //           where: {
-  //             followerId,
-  //           },
-  //           select: {
-  //             followerId: true,
-  //           },
-  //         },
-  //         follower: {
-  //           where: {
-  //             followingId: followerId,
-  //           },
-  //           select: {
-  //             followingId: true,
-  //           },
-  //         },
-  //       },
-  //     });
-
-  //     return users.map((user) => ({
-  //       id: user.id,
-  //       fullName: user.fullName,
-  //       isFollowing: user.following.length > 0,
-  //       isFollowedBy: user.follower.length > 0,
-  //     }));
-  //   } catch (error) {
-  //     throw new Error(`Failed to retrieve users: ${error.message}`);
-  //   }
-  // }
+  async find(search: string) {
+    try {
+      return await prisma.user.findMany({
+        orderBy: [
+          {
+            fullName: "asc",
+          },
+          {
+            username: "asc",
+          },
+        ],
+        where: {
+          OR: [
+            {
+              username: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+            {
+              fullName: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message || "Failed to retrieve users");
+    }
+  }
 }
 
 export const userService = new UserService();

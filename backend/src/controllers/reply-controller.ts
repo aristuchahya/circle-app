@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { replyService } from "../services/reply-service";
+import { ReplyDto } from "../dto/reply-dto";
 
 class ReplyController {
   async createReply(req: Request, res: Response) {
@@ -17,10 +18,48 @@ class ReplyController {
     }
   }
 
+  async addReply(req: Request, res: Response) {
+    /*  #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                       $ref: "#/components/schemas/ReplyDTO"
+                    }  
+                }
+            }
+        } 
+    */
+    try {
+      const { id } = req.params;
+      const userId = res.locals.user.id;
+      const { content } = req.body;
+      const dto: ReplyDto = { content, userId, threadId: Number(id) };
+      const reply = await replyService.addReply(dto);
+      console.log("create reply", reply);
+      res.json(reply);
+    } catch (error) {
+      res.status(400).json({ message: "Bad Request" });
+    }
+  }
+
+  async countReplies(req: Request, res: Response) {
+    try {
+      const { threadId } = req.params;
+
+      const reply = await replyService.countReplies(Number(threadId));
+      res.json(reply);
+    } catch (error) {
+      res.status(400).json({ message: "Bad Request" });
+    }
+  }
+
   async findAllReply(req: Request, res: Response) {
     try {
-      const reply = await replyService.findAll();
-      res.status(200).json({ message: "success", reply });
+      const { id } = req.params;
+      const reply = await replyService.findAll(Number(id));
+
+      res.status(200).json(reply);
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }

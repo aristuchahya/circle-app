@@ -15,11 +15,22 @@ class ReplyService {
     }
   }
 
-  async findAll() {
+  async findAll(id: number) {
     try {
       const reply = await prisma.reply.findMany({
-        include: { User: true, Thread: true },
+        where: { threadId: id },
+        include: {
+          User: {
+            select: {
+              id: true,
+              fullName: true,
+              username: true,
+              photoProfile: true,
+            },
+          },
+        },
       });
+
       return reply;
     } catch (error) {
       return error;
@@ -39,6 +50,32 @@ class ReplyService {
       return reply;
     } catch (error) {
       return error;
+    }
+  }
+
+  async addReply(dto: ReplyDto) {
+    try {
+      const validate = createreplyschema.validate(dto);
+      if (validate.error) return validate.error;
+
+      const reply = await prisma.reply.create({
+        data: { ...dto },
+      });
+      console.log(reply);
+      return reply;
+    } catch (error) {
+      throw new Error(error.message || "Failed to add reply");
+    }
+  }
+
+  async countReplies(threadId: number) {
+    try {
+      const count = await prisma.reply.count({
+        where: { threadId },
+      });
+      return count;
+    } catch (error) {
+      throw new Error(error.message || "Failed to count replies");
     }
   }
 

@@ -29,7 +29,7 @@ export function Head() {
   return (
     <>
       <Box m={"5"} maxWidth="xl">
-        <Heading fontSize="xl" mb="5" fontWeight="medium">
+        <Heading fontSize="xl" mb="5" fontWeight="semibold">
           Home
         </Heading>
         <Box display="flex">

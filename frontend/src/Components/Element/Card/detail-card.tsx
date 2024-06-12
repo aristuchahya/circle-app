@@ -18,19 +18,12 @@ import { InputForm } from "../input/input";
 import { LuImagePlus } from "react-icons/lu";
 import { Post } from "../Button/post";
 
-import { PostCard } from "./post-card";
+import { useHomePage } from "../../../features/home/hook/use-home";
+
+import { HomeThreads } from "../../../features/home/components/home-threads";
 
 export function DetailCard() {
-  // const [users, setUsers] = useState<ThreadProps[]>([]);
-
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const response = await fetch("/data.json");
-  //     const data: ThreadProps[] = await response.json();
-  //     setUsers(data);
-  //   };
-  //   fetchUsers();
-  // }, []);
+  const { threads } = useHomePage();
 
   return (
     <>
@@ -101,19 +94,11 @@ export function DetailCard() {
           <Post fontSize="12">Reply</Post>
         </HStack>
         <Divider />
-        <PostCard />
-        {/* {users.map((user) => (
-          <PostCard
-            key={user.id}
-            name={user.name}
-            username={user.username}
-            avatar={user.avatar}
-            image={user.image}
-            post={user.post}
-            like={user.like}
-            comment={user.comment}
-          />
-        ))} */}
+        <Box position={"relative"} top="12" right="5">
+          {threads?.map((thread) => (
+            <HomeThreads thread={thread} />
+          ))}
+        </Box>
       </Box>
     </>
   );

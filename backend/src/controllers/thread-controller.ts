@@ -16,8 +16,8 @@ class ThreadsController {
 
   async findThread(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const thread = await threadService.findOneThread(Number(id));
+      const userId = res.locals.user?.id;
+      const thread = await threadService.findOneThread(Number(userId));
       if (!thread) return res.status(404).json({ message: "Thread not found" });
       res.status(200).json(thread);
     } catch (error) {
@@ -26,6 +26,17 @@ class ThreadsController {
   }
 
   async create(req: Request, res: Response) {
+    /*  #swagger.requestBody = {
+            required: true,
+            content: {
+                "multipart/form-data": {
+                    schema: {
+                       $ref: "#/components/schemas/CreateThreadsDTO"
+                    }  
+                }
+            }
+        } 
+    */
     try {
       const user = res.locals.user as UserJWTPayloads;
 

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { UserJWTPayloads } from "../types/auth";
 
 dotenv.config();
 
@@ -9,6 +10,11 @@ export async function authenticate(
   res: Response,
   next: NextFunction
 ) {
+  /* 
+  #swagger.security = [{
+            "bearerAuth": []
+    }] 
+            */
   const authorizationHeader = req.headers.authorization;
 
   if (!authorizationHeader || !authorizationHeader.startsWith("Bearer")) {

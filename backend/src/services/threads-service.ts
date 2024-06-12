@@ -9,6 +9,7 @@ class ThreadSevice {
   async getAllThreads() {
     try {
       return await prisma.thread.findMany({
+        orderBy: { createdAt: "desc" },
         include: {
           created: {
             select: {
@@ -28,10 +29,19 @@ class ThreadSevice {
 
   async findOneThread(id: number) {
     try {
-      const thread = await prisma.thread.findFirst({
-        where: { id },
+      const thread = await prisma.thread.findMany({
+        orderBy: { createdAt: "desc" },
+        where: { createdBy: id },
         include: {
-          created: { select: { id: true, username: true, createdAt: true } },
+          created: {
+            select: {
+              id: true,
+              username: true,
+              fullName: true,
+              photoProfile: true,
+              createdAt: true,
+            },
+          },
         },
       });
       if (!thread) return null;
@@ -62,7 +72,6 @@ class ThreadSevice {
       const thread = await prisma.thread.create({
         data: { ...dto, createdBy, image: upload.secure_url },
       });
-      console.log("thread result:", thread);
 
       return thread;
     } catch (error) {

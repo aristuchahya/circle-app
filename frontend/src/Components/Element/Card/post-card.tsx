@@ -1,6 +1,5 @@
 import {
   Avatar,
-  AvatarBadge,
   Box,
   Divider,
   Flex,
@@ -11,26 +10,28 @@ import {
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { TfiCommentAlt } from "react-icons/tfi";
+import { ThreadEntity } from "../../../features/home/entities/thread";
 
-export function PostCard() {
+interface ThreadUser {
+  thread: ThreadEntity;
+}
+export function PostCard({ thread }: ThreadUser) {
   return (
     <>
       <Box>
         <Flex mt="3">
-          <Avatar size={"sm"} src="">
-            <AvatarBadge boxSize="1em" bg="green.500" />
-          </Avatar>
+          <Avatar size={"sm"} src={thread.created.photoProfile}></Avatar>
           <Text color={"white"} pt={"1"} size="sm" ps="3">
-            aristu
+            {thread.created.fullName}
           </Text>
           <Text color={"grey"} pt={"1"} ps="2">
-            @arist
+            @{thread.created.username}
           </Text>
         </Flex>
         <Text color="white" ms="10" my="3" fontSize="14" textAlign="justify">
-          content
+          {thread.content}
         </Text>
-        <Image src="" borderRadius="lg" ms="10" />
+        <Image src={thread.image} borderRadius="lg" ms="10" width="md" />
         <HStack mb="3" ms="10">
           <Icon as={CiHeart} color={"white"} mt="3" ms="4" boxSize={"5"} />
           <Text mt="3" position="relative" right="2" fontSize="12">

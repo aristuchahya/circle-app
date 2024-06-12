@@ -75,7 +75,8 @@ model Like {
 }
 
 model Reply {
-  id Int @id @default(autoincrement())
+  id      Int     @id @default(autoincrement())
+  content String?
 
   User     User   @relation(fields: [userId], references: [id])
   userId   Int

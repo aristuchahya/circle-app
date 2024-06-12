@@ -10,20 +10,20 @@ import { likeController } from "../controllers/like-controller";
 const router = Router();
 
 //user
-router.get("/users", authenticate, userController.getAllUsers);
-router.get("/users/:id", authenticate, userController.getUserById);
+// router.get("/users", authenticate, userController.getAllUsers);
+router.get("/user/profile", authenticate, userController.getUserById);
 router.post("/users", userController.createUser);
 router.patch(
-  "/users/:id",
+  "/users/profile",
   authenticate,
   upload.single("photoProfile"),
   userController.updateUser
 );
 router.delete("/users/:id", authenticate, userController.deleteUser);
-
 router.post("/users/follow", authenticate, userController.follow);
 router.get("/users/follow/:followingId", authenticate, userController.isFollow);
 router.get("/follows", authenticate, userController.findFollow);
+router.get("/users", authenticate, userController.findUser);
 //auth
 router.post("/auth/login", authController.login);
 router.post("/auth/register", authController.register);
@@ -31,7 +31,7 @@ router.post("/auth/check", authenticate, authController.check);
 
 //threads
 router.get("/threads", authenticate, threadController.findAll);
-router.get("/threads/:id", authenticate, threadController.findThread);
+router.get("/users/:userId/threads", authenticate, threadController.findThread);
 router.post(
   "/threads",
   authenticate,
@@ -48,9 +48,15 @@ router.delete("/threads/:id", authenticate, threadController.deleteThread);
 
 //reply
 router.post("/replies", authenticate, replyController.createReply);
-router.get("/replies", authenticate, replyController.findAllReply);
+router.get("/threads/:id/replies", authenticate, replyController.findAllReply);
 router.get("/replies/:id", authenticate, replyController.findReply);
 router.delete("/replies/:id", authenticate, replyController.deleteReply);
+router.post("/replies/:id", authenticate, replyController.addReply);
+router.get(
+  "/replies/:threadId/count",
+  authenticate,
+  replyController.countReplies
+);
 
 //like
 router.post("/likes", authenticate, likeController.createLike);

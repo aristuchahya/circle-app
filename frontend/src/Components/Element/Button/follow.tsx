@@ -1,6 +1,6 @@
-import { Button } from "@chakra-ui/react";
+import { Button, ButtonProps } from "@chakra-ui/react";
 
-interface TextProps {
+interface TextProps extends ButtonProps {
   top?: string;
   left?: string;
   right?: string;

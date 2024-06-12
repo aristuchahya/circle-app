@@ -14,8 +14,8 @@ class UserController {
 
   async getUserById(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const user = await userService.getUserById(Number(id));
+      const userId = res.locals.user.id;
+      const user = await userService.getUserById(Number(userId));
       res.status(200).json(user);
     } catch (error) {
       return error;
@@ -32,9 +32,21 @@ class UserController {
   }
 
   async updateUser(req: Request, res: Response) {
+    /*  #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                       $ref: "#/components/schemas/UpdateUserDTO"
+                    }  
+                }
+            }
+        } 
+    */
     try {
-      const { id } = req.params;
-      const user = await userService.getUserById(Number(id));
+      const userId = res.locals.user.id;
+      const user = await userService.getUserById(userId);
+      console.log("user update:", user);
 
       if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -43,8 +55,8 @@ class UserController {
         photoProfile: req.file.path,
       };
 
-      const update = await userService.updateUser(Number(id), body);
-
+      const update = await userService.updateUser(userId, body);
+      console.log("update result:", update);
       res.status(201).json(update);
     } catch (error) {
       return error;
@@ -84,16 +96,6 @@ class UserController {
         ...req.body,
         followerId: user.id,
       };
-      // const dto: CreateFollowDto = {
-      //   followerId: user.id,
-      //   followingId: req.body.followingId,
-      // };
-
-      // if (typeof followingId !== 'number') {
-      //   return res
-      //     .status(400)
-      //     .json({ message: "Follower ID and Followed user ID are required" });
-      // }
 
       const result = await userService.followUser(body);
       return res.status(200).json({ message: "success", result });
@@ -132,15 +134,15 @@ class UserController {
     }
   }
 
-  // async allFollowStatus(req: Request, res: Response) {
-  //   const followerId = res.locals.user.id;
-  //   try {
-  //     const user = await userService.getAllStatus(followerId);
-  //     res.status(200).json({ message: "success", user });
-  //   } catch (error) {
-  //     res.status(400).json({ message: error.message });
-  //   }
-  // }
+  async findUser(req: Request, res: Response) {
+    try {
+      const search = req.query.search as string;
+      const users = await userService.find(search);
+      return res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 export const userController = new UserController();

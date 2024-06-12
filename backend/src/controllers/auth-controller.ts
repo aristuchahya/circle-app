@@ -3,6 +3,17 @@ import { authService } from "../services/auth";
 
 class AuthController {
   async login(req: Request, res: Response) {
+    /*  #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                       $ref: "#/components/schemas/LoginDTO"
+                    }  
+                }
+            }
+        } 
+    */
     try {
       const user = await authService.login(req.body);
       console.log(user);
@@ -13,6 +24,17 @@ class AuthController {
   }
 
   async register(req: Request, res: Response) {
+    /*  #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                       $ref: "#/components/schemas/RegisterDTO"
+                    }  
+                }
+            }
+        } 
+    */
     try {
       const user = await authService.register(req.body);
       console.log(req.body);

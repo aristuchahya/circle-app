@@ -56,16 +56,16 @@ export function ListBar() {
         <ListItem
           mt="4"
           fontSize="large"
-          fontWeight={isActive("/profile") ? "bold" : ""}
+          fontWeight={isActive("/profile/:userId") ? "bold" : ""}
           _hover={{ textDecoration: "none", color: "gray.300" }}
         >
           <ListIcon
             as={FaUser}
             stroke="white"
             strokeWidth="30"
-            fill={isActive("/profile") ? "white" : "none"}
+            fill={isActive("/profile/:userId") ? "white" : "none"}
           />
-          <Link to="/profile">Profile</Link>
+          <Link to="/profile/:userId">Profile</Link>
         </ListItem>
       </List>
     </>

@@ -2,6 +2,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import router from "./routes/users-routes";
+import swaggerUi from "swagger-ui-express";
+import swaggerDoc from "../swagger/swagger-output.json";
 dotenv.config();
 
 const app = express();
@@ -16,6 +18,15 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/v1", router);
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDoc, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  })
+);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
