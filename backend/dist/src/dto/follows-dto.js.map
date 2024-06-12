@@ -1,0 +1,1 @@
+{"version":3,"file":"follows-dto.js","sourceRoot":"","sources":["../../../src/dto/follows-dto.ts"],"names":[],"mappings":";;;;;;AAAA,4CAAsB;AAMT,QAAA,kBAAkB,GAAG,aAAG,CAAC,MAAM,CAAkB;IAC5D,WAAW,EAAE,aAAG,CAAC,MAAM,EAAE,CAAC,QAAQ,EAAE;IACpC,UAAU,EAAE,aAAG,CAAC,MAAM,EAAE,CAAC,QAAQ,EAAE;CACpC,CAAC,CAAC"}

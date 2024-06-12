@@ -33,7 +33,9 @@
     "swagger-ui-express": "^5.0.1"
   },
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "swagger": "node swagger/swagger.js"
+    "start": "node dist/src/index.js",
+    "dev": "nodemon src/index.ts",
+    "swagger": "node swagger/swagger.js",
+    "build": "tsc && prisma generate"
   }
 }
