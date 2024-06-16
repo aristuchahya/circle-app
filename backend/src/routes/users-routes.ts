@@ -1,4 +1,5 @@
 import { Router } from "express";
+import cors from "cors";
 import { userController } from "../controllers/user-controller";
 import { authController } from "../controllers/auth-controller";
 import { threadController } from "../controllers/thread-controller";
@@ -8,6 +9,7 @@ import { replyController } from "../controllers/reply-controller";
 import { likeController } from "../controllers/like-controller";
 
 const router = Router();
+router.use(cors());
 
 //user
 // router.get("/users", authenticate, userController.getAllUsers);

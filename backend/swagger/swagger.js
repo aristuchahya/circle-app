@@ -8,6 +8,14 @@ const doc = {
     title: "Circle App API ",
     description: "Welcome to Circle App API",
   },
+  servers: [
+    {
+      url: "https://circle-app-production.up.railway.app/",
+    },
+    {
+      url: "http://localhost:3000",
+    },
+  ],
   components: {
     "@schemas": {
       CreateThreadDTO: {
