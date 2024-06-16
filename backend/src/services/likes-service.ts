@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { createlikeschema, LikeDto } from "../dto/likes-dto";
+import { threadId } from "worker_threads";
 
 const prisma = new PrismaClient();
 
@@ -16,12 +17,15 @@ class LikesService {
     }
   }
 
-  async findAll() {
+  async findAll(id: number) {
     try {
-      const reply = await prisma.reply.findMany({
+      const likes = await prisma.like.findMany({
+        where: {
+          threadId: id,
+        },
         include: { User: true, Thread: true },
       });
-      return reply;
+      return likes;
     } catch (error) {
       return error;
     }
@@ -36,7 +40,7 @@ class LikesService {
         data: { ...dto },
       });
 
-      await this.updateLikeCount(dto.threadId);
+      // await this.updateLikeCount(dto.threadId);
       return like;
     } catch (error) {
       return error;
@@ -55,16 +59,18 @@ class LikesService {
     }
   }
 
-  private async updateLikeCount(threadId: number) {
+  async updateLikeCount(threadId: number) {
     try {
       const count = await prisma.like.count({
         where: { threadId },
       });
+      console.log("like count:", count);
+      return count;
 
-      await prisma.thread.update({
-        where: { id: threadId },
-        data: { numberOfLikes: count },
-      });
+      // await prisma.thread.update({
+      //   where: { id: threadId },
+      //   data: { numberOfLikes: count },
+      // });
     } catch (error) {
       return error;
     }

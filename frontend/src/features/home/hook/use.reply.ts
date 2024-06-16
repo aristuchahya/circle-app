@@ -16,6 +16,14 @@ export const useReply = ({ thread }: HomeThreadsProps) => {
     enabled: !!thread.id,
   });
 
+  const { data: replyCountData } = useQuery<{ count: number }>({
+    queryKey: ["replyCount", thread.id],
+    queryFn: () => getCountReply(thread.id),
+    enabled: !!thread.id,
+  });
+
+  const replyCount = replyCountData?.count || 0;
+
   const {
     register,
     handleSubmit,
@@ -31,8 +39,20 @@ export const useReply = ({ thread }: HomeThreadsProps) => {
         Authorization: `Bearer ${localStorage.token}`,
       },
     });
+    return response.data;
+  }
 
-    console.log("reply result:", response.data);
+  async function getCountReply(threadId: number) {
+    if (!thread.id) throw new Error("thread id not found");
+    const response = await api.get<{ count: number }>(
+      `replies/${threadId}/count`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`,
+        },
+      }
+    );
+    console.log("reply count:", response.data);
     return response.data;
   }
 
@@ -73,6 +93,7 @@ export const useReply = ({ thread }: HomeThreadsProps) => {
     register,
     handleSubmit,
     replies,
+    replyCount,
     handleReplyClick,
     onSubmit,
     isCommenting,

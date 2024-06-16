@@ -90,16 +90,17 @@ class UserController {
   // }
 
   async follow(req: Request, res: Response) {
+    const user = res.locals.user;
+    const body = {
+      ...req.body,
+      followerId: user.id,
+    };
     try {
-      const user = res.locals.user;
-      const body = {
-        ...req.body,
-        followerId: user.id,
-      };
-
       const result = await userService.followUser(body);
-      return res.status(200).json({ message: "success", result });
+      console.log(result);
+      return res.status(200).json(result);
     } catch (error) {
+      console.error(error);
       return res.status(500).json({ message: "Internal server error" });
     }
   }
@@ -107,8 +108,6 @@ class UserController {
   async isFollow(req: Request, res: Response) {
     const { followingId } = req.params;
     const followerId = res.locals.user.id;
-    console.log("user :", followerId);
-    console.log("user 2 :", followingId);
 
     if (!followingId)
       return res.status(400).json({ message: "Followed user ID is required" });
@@ -131,6 +130,53 @@ class UserController {
       res.status(200).json({ message: "success", follow });
     } catch (error) {
       res.status(400).json({ message: error.message });
+    }
+  }
+
+  async getFollowers(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+      const followers = await userService.getFollowers(Number(userId));
+      res.json(followers);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  async getFollowing(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+      const following = await userService.getFollowing(Number(userId));
+      res.json(following);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  async unfollowUser(req: Request, res: Response) {
+    try {
+      const followerId = res.locals.user.id;
+      const { followingId } = req.body;
+
+      if (!followingId || !Number.isInteger(followingId)) {
+        return res
+          .status(400)
+          .json({ message: "Invalid or missing followingId" });
+      }
+
+      if (!followerId || !Number.isInteger(followerId)) {
+        return res
+          .status(400)
+          .json({ message: "Invalid or missing followerId" });
+      }
+
+      const result = await userService.unfollowUser(followerId, followingId);
+
+      res.status(200).json(result);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Internal server error", error: error.message });
     }
   }
 

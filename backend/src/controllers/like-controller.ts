@@ -11,7 +11,7 @@ class LikeController {
         userId: user.id,
       };
       const like = await likeService.createLike(body);
-      res.status(201).json({ message: "Reply created", like });
+      res.status(201).json(like);
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }
@@ -19,8 +19,21 @@ class LikeController {
 
   async findAllLike(req: Request, res: Response) {
     try {
-      const like = await likeService.findAll();
-      res.status(200).json({ message: "success", like });
+      const { id } = req.params;
+      const like = await likeService.findAll(Number(id));
+      res.status(200).json(like);
+    } catch (error) {
+      return res.status(400).json({ message: "Bad Request" });
+    }
+  }
+
+  async countLike(req: Request, res: Response) {
+    try {
+      const { threadId } = req.params;
+
+      const like = await likeService.updateLikeCount(Number(threadId));
+      console.log("count", like);
+      res.json(like);
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }

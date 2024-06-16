@@ -31,6 +31,7 @@ export function HomeThreads({ thread }: HomeThreadsProps) {
     replies,
     toggleComment,
     showComment,
+    replyCount,
   } = useReply({ thread });
   return (
     <>
@@ -66,7 +67,7 @@ export function HomeThreads({ thread }: HomeThreadsProps) {
             cursor={"pointer"}
           />
           <Text mt="3" position="relative" right="1" fontSize="12">
-            {thread.numberOfReplies} replies
+            {replyCount} replies
           </Text>
         </HStack>
         <Divider />

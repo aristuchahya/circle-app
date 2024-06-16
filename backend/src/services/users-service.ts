@@ -110,6 +110,36 @@ class UserService {
     if (followerId === followingId)
       throw new Error("user cannot follow themselves");
     try {
+      console.log(
+        `Checking if user ${followerId} already follows user ${followingId}`
+      );
+
+      const user = await prisma.user.findUnique({
+        where: {
+          id: followingId,
+        },
+      });
+
+      if (!user) {
+        throw new Error(`User with id ${followingId} not found`);
+      }
+
+      const existingFollow = await prisma.following.findUnique({
+        where: {
+          followingId_followerId: {
+            followerId,
+            followingId,
+          },
+        },
+      });
+
+      if (existingFollow) {
+        throw new Error("User already followed");
+      }
+
+      console.log(
+        `Creating follow relationship for user ${followerId} to follow user ${followingId}`
+      );
       const follow = await prisma.following.create({
         data: { ...dto },
       });
@@ -133,6 +163,56 @@ class UserService {
       return follow !== null;
     } catch (error) {
       throw new Error(`Failed to check follow status: ${error.message}`);
+    }
+  }
+
+  async getFollowers(userId: number) {
+    try {
+      return await prisma.following.findMany({
+        where: {
+          followingId: userId,
+        },
+        include: {
+          follower: true,
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message || "Failed to retrieve users");
+    }
+  }
+
+  async getFollowing(userId: number) {
+    try {
+      return await prisma.following.findMany({
+        where: {
+          followerId: userId,
+        },
+        include: {
+          following: true,
+        },
+      });
+    } catch (error) {
+      throw new Error(error.message || "Failed to retrieve users");
+    }
+  }
+
+  async unfollowUser(followerId: number, followingId: number) {
+    try {
+      const result = await prisma.following.deleteMany({
+        where: {
+          followerId,
+          followingId,
+        },
+      });
+
+      if (result.count === 0) {
+        return { message: "No follow relationship found to delete" };
+      }
+
+      return { message: "User unfollowed successfully" };
+    } catch (error) {
+      console.error("Prisma error in unfollowUser:", error);
+      throw new Error(`Failed to unfollow user: ${error.message}`);
     }
   }
 

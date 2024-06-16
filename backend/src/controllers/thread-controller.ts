@@ -31,7 +31,7 @@ class ThreadsController {
             content: {
                 "multipart/form-data": {
                     schema: {
-                       $ref: "#/components/schemas/CreateThreadsDTO"
+                       $ref: "#/components/schemas/CreateThreadDTO"
                     }  
                 }
             }

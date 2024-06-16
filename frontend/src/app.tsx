@@ -69,7 +69,7 @@ function App() {
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/detail" element={<DetailPage />} />
-        <Route path="/follows" element={<FollowsPage />} />
+        <Route path="/follows/:id" element={<FollowsPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

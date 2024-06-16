@@ -24,6 +24,10 @@ router.post("/users/follow", authenticate, userController.follow);
 router.get("/users/follow/:followingId", authenticate, userController.isFollow);
 router.get("/follows", authenticate, userController.findFollow);
 router.get("/users", authenticate, userController.findUser);
+router.get("/followers/:userId", authenticate, userController.getFollowers);
+router.get("/followings/:userId", authenticate, userController.getFollowing);
+router.delete("/unfollow", authenticate, userController.unfollowUser);
+
 //auth
 router.post("/auth/login", authController.login);
 router.post("/auth/register", authController.register);
@@ -60,8 +64,9 @@ router.get(
 
 //like
 router.post("/likes", authenticate, likeController.createLike);
-router.get("/likes", authenticate, likeController.findAllLike);
-router.get("likes/:id", authenticate, likeController.findLike);
+router.get("/threads/:id/likes", authenticate, likeController.findAllLike);
+router.get("/likes/:threadId/threads", authenticate, likeController.countLike);
+router.get("/likes/:id", authenticate, likeController.findLike);
 router.delete("/likes/:id", authenticate, likeController.deleteLike);
 
 export default router;

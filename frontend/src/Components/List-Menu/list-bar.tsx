@@ -3,8 +3,23 @@ import { AiFillHome } from "react-icons/ai";
 import { FaHeart, FaUser } from "react-icons/fa";
 import { TbUserSearch } from "react-icons/tb";
 import { Link, useLocation } from "react-router-dom";
+import { api } from "../../libs/api";
+import { useQuery } from "@tanstack/react-query";
+
+const getUserData = async () => {
+  const response = await api.get("/user/profile", {
+    headers: {
+      Authorization: `Bearer ${localStorage.token}`,
+    },
+  });
+  return response.data;
+};
 
 export function ListBar() {
+  const { data: userData } = useQuery({
+    queryKey: ["userData"],
+    queryFn: getUserData,
+  });
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -42,16 +57,16 @@ export function ListBar() {
         <ListItem
           mt="4"
           fontSize="large"
-          fontWeight={isActive("/follows") ? "bold" : ""}
+          fontWeight={isActive(`/follows/${userData?.id}`) ? "bold" : ""}
           _hover={{ textDecoration: "none", color: "gray.300" }}
         >
           <ListIcon
             as={FaHeart}
             stroke="white"
             strokeWidth="20"
-            fill={isActive("/follows") ? "white" : "none"}
+            fill={isActive(`/follows/${userData?.id}`) ? "white" : "none"}
           />
-          <Link to="/follows">Follows</Link>
+          <Link to={`/follows/${userData?.id}`}>Follows </Link>
         </ListItem>
         <ListItem
           mt="4"
