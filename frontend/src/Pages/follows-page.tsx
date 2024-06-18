@@ -8,13 +8,15 @@ import { useParams } from "react-router-dom";
 function FollowsPage() {
   const { id } = useParams<{ id: string }>();
 
+  const initialIsFollowing = false;
+
   return (
     <>
       <Flex>
         <Sidebar />
         <Divider orientation="vertical" />
         <Spacer />
-        <FollowsCard {...{ userId: Number(id) }} />
+        <FollowsCard {...{ userId: Number(id), initialIsFollowing }} />
         <Divider orientation="vertical" />
         <Spacer />
         <RightBar />
