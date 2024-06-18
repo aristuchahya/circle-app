@@ -1,36 +1,34 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api } from "../../../libs/api";
 import { FollowingEntity } from "../entities/follows";
+import { FollowsCardProps } from "../../../Components/Element/Card/follows-card";
+import { useState } from "react";
 
-export const useFollows = (userId: number) => {
+export const useFollows = ({
+  userId,
+  initialIsFollowing,
+}: FollowsCardProps) => {
+  const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
+
+  const queryClient = useQueryClient();
   const getFollowing = async () => {
-    try {
-      const response = await api.get(`/followings/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching followings:", error);
-      throw new Error("Failed to fetch followings");
-    }
+    const response = await api.get(`/followings/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+    });
+    return response.data;
   };
 
   const getFollowers = async () => {
-    try {
-      const response = await api.get(`/followers/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.token}`,
-        },
-      });
-      console.log("getFollowers:", response.data);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching followers:", error);
-      throw new Error("Failed to fetch followers");
-    }
+    const response = await api.get(`/followers/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+    });
+
+    return response.data;
   };
 
   const { data: followings } = useQuery<FollowingEntity[]>({
@@ -45,8 +43,113 @@ export const useFollows = (userId: number) => {
     enabled: !!localStorage.token,
   });
 
+  const followMutation = useMutation({
+    mutationFn: async () => {
+      console.log(`following with ID: ${userId}`);
+      return await api.post(
+        "/users/follow",
+        { followingId: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.token}`,
+          },
+        }
+      );
+    },
+    // onSuccess: () => {
+    //   console.log(`Successfully followed user with ID: ${userId}`);
+    //   queryClient.invalidateQueries({ queryKey: ["followings", userId] });
+    // },
+
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["followings", userId] });
+      await queryClient.cancelQueries({ queryKey: ["followers", userId] });
+
+      const previousFollowings = queryClient.getQueryData<FollowingEntity[]>([
+        "followings",
+        userId,
+      ]);
+      const previousFollowers = queryClient.getQueryData<FollowingEntity[]>([
+        "followers",
+        userId,
+      ]);
+
+      setIsFollowing(true);
+
+      queryClient.setQueryData<FollowingEntity[]>(
+        ["followings", userId],
+        (old) =>
+          old
+            ? [...old, { following: { id: userId } } as FollowingEntity]
+            : [{ following: { id: userId } } as FollowingEntity]
+      );
+
+      return { previousFollowings, previousFollowers };
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["followings", userId] });
+      queryClient.invalidateQueries({ queryKey: ["followers", userId] });
+    },
+  });
+
+  const unFollowMutation = useMutation({
+    mutationFn: async () => {
+      console.log(`Unfollowing user with ID: ${userId}`);
+      return await api.delete("/unfollow", {
+        data: { followingId: userId },
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`,
+        },
+      });
+    },
+    onSuccess: () => {
+      console.log(`Successfully unfollowed user with ID: ${userId}`);
+      queryClient.invalidateQueries({ queryKey: ["followings", userId] });
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ["followings", userId] });
+      await queryClient.cancelQueries({ queryKey: ["followers", userId] });
+
+      const previousFollowings = queryClient.getQueryData<FollowingEntity[]>([
+        "followings",
+        userId,
+      ]);
+      const previousFollowers = queryClient.getQueryData<FollowingEntity[]>([
+        "followers",
+        userId,
+      ]);
+
+      setIsFollowing(false);
+
+      queryClient.setQueryData<FollowingEntity[]>(
+        ["followings", userId],
+        (old) => (old ? old.filter((f) => f.following.id !== userId) : [])
+      );
+
+      return { previousFollowings, previousFollowers };
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["followings", userId] });
+      queryClient.invalidateQueries({ queryKey: ["followers", userId] });
+    },
+  });
+
+  const handleFollow = () => {
+    console.log(`handleFollow called with isFollowing: ${isFollowing}`);
+    if (isFollowing) {
+      console.log(`Unfollowing user with ID: ${userId}`);
+      unFollowMutation.mutate();
+    } else {
+      console.log(`following with ID: ${userId}`);
+      followMutation.mutate();
+    }
+  };
+
   return {
     followings,
     followers,
+    handleFollow,
+    isFollowing,
   };
 };

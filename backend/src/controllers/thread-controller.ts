@@ -70,7 +70,11 @@ class ThreadsController {
         createdBy: user.id,
       };
 
-      const updateThread = await threadService.updateThread(Number(id), body);
+      const updateThread = await threadService.updateThread(
+        Number(id),
+
+        body
+      );
       res.status(200).json({ message: "Thread updated", updateThread });
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });

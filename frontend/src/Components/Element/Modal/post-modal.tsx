@@ -70,7 +70,7 @@ export function PostModal({ isOpen, onClose }: PostModalProps) {
                 <Input
                   type="file"
                   id="upload-file"
-                  display="none"
+                  hidden
                   accept="image/*"
                   {...register("image")}
                 />

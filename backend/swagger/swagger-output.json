@@ -102,7 +102,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateUserDTO"
               }
@@ -935,6 +935,27 @@
           "username",
           "email",
           "password"
+        ]
+      },
+      "UpdateUserDTO": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "photoProfile": {
+            "type": "file"
+          },
+          "bio": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "photoProfile",
+          "bio"
         ]
       }
     }

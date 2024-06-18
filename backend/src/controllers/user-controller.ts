@@ -35,7 +35,7 @@ class UserController {
     /*  #swagger.requestBody = {
             required: true,
             content: {
-                "application/json": {
+                "multipart/form-data": {
                     schema: {
                        $ref: "#/components/schemas/UpdateUserDTO"
                     }  
@@ -127,7 +127,7 @@ class UserController {
     const user = res.locals.user;
     try {
       const follow = await userService.findFollow(user);
-      res.status(200).json({ message: "success", follow });
+      res.status(200).json(follow);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }

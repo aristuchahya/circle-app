@@ -17,17 +17,16 @@ import {
 import { Follow } from "../Button/follow";
 import { useFollows } from "../../../features/follows/hook/use-follows";
 
-interface FollowsCardProps {
+export interface FollowsCardProps {
   userId: number;
+  initialIsFollowing: boolean;
 }
-export function FollowsCard({ userId }: FollowsCardProps) {
-  const { followings, followers } = useFollows(userId);
+export function FollowsCard({ userId, initialIsFollowing }: FollowsCardProps) {
+  const { followings, followers } = useFollows({
+    userId,
+    initialIsFollowing,
+  });
 
-  console.log("Following :", followings);
-  console.log("Followers :", followers);
-  if (!userId) {
-    return <Text>Error: Invalid userId</Text>;
-  }
   return (
     <>
       <Box m="5" w="xl">
@@ -50,7 +49,7 @@ export function FollowsCard({ userId }: FollowsCardProps) {
               <Flex direction={"column"} gap={"2"} mt="2">
                 {followers &&
                   followers?.map((follower) => (
-                    <HStack key={follower.id}>
+                    <HStack key={follower.follower.id}>
                       <Avatar
                         boxSize="2em"
                         src={follower.follower.photoProfile}
@@ -65,7 +64,10 @@ export function FollowsCard({ userId }: FollowsCardProps) {
                         <Text fontSize="14px">{follower.follower.bio}</Text>
                       </VStack>
                       <Spacer />
-                      <Follow fontSize="14">Follow</Follow>
+                      <Follow
+                        userId={follower.follower.id}
+                        initialIsFollowing={false}
+                      ></Follow>
                     </HStack>
                   ))}
               </Flex>
@@ -74,7 +76,7 @@ export function FollowsCard({ userId }: FollowsCardProps) {
               <Flex direction={"column"} gap={"2"} mt="2">
                 {followings &&
                   followings?.map((following) => (
-                    <HStack key={following.id}>
+                    <HStack key={following.following.id}>
                       <Avatar
                         boxSize="2em"
                         src={following.following.photoProfile}
@@ -89,7 +91,10 @@ export function FollowsCard({ userId }: FollowsCardProps) {
                         <Text fontSize="14px">{following.following.bio}</Text>
                       </VStack>
                       <Spacer />
-                      <Follow fontSize="14">Follow</Follow>
+                      <Follow
+                        userId={following.following.id}
+                        initialIsFollowing={true}
+                      ></Follow>
                     </HStack>
                   ))}
               </Flex>

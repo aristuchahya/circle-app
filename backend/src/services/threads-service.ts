@@ -103,7 +103,7 @@ class ThreadSevice {
       });
 
       return await prisma.thread.update({
-        where: { id: Number(id) },
+        where: { id: thread.id },
         data: { ...thread, image: upload.secure_url },
       });
     } catch (error) {

@@ -23,15 +23,26 @@ import { EditModal } from "../Modal/edit-modal";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import { useProfile } from "../../../features/profile/hook/use-profile";
+import { useFollows } from "../../../features/follows/hook/use-follows";
+import { useEffect, useState } from "react";
 
 interface ThreadProps {
   userId: number;
 }
 export function ProfileCard({ userId }: ThreadProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [followingCount, setFollowingCount] = useState(0);
 
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const { threads } = useProfile(userId);
+
+  const { followings } = useFollows({ userId, initialIsFollowing: false });
+  useEffect(() => {
+    if (followings) {
+      setFollowingCount(followings.length);
+      console.log("updated following count:", followings.length);
+    }
+  }, [followings]);
 
   return (
     <>
@@ -55,7 +66,7 @@ export function ProfileCard({ userId }: ThreadProps) {
           {currentUser.bio}
         </Text>
         <HStack spacing={"2"}>
-          <Text fontSize="12">290</Text>
+          <Text fontSize="12">{followingCount}</Text>
           <Text color="grey" fontSize="12">
             Following
           </Text>

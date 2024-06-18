@@ -1,4 +1,4 @@
 export interface ThreadForm {
   content: string;
-  image: FileList;
+  image: FileList | null;
 }

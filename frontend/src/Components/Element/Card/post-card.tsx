@@ -6,16 +6,30 @@ import {
   HStack,
   Icon,
   Image,
+  Spacer,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { CiHeart } from "react-icons/ci";
 import { TfiCommentAlt } from "react-icons/tfi";
+import { Pencil, Trash2 } from "lucide-react";
 import { ThreadEntity } from "../../../features/home/entities/thread";
+import { ThreadModal } from "../Modal/thread-modal";
+import { useThreadsUpdate } from "../../../features/profile/hook/threads-update";
 
-interface ThreadUser {
+export interface ThreadUser {
   thread: ThreadEntity;
 }
 export function PostCard({ thread }: ThreadUser) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { deleteThread } = useThreadsUpdate({ thread });
+
+  const handleDelete = async () => {
+    await deleteThread();
+    onClose();
+  };
+
   return (
     <>
       <Box>
@@ -27,6 +41,12 @@ export function PostCard({ thread }: ThreadUser) {
           <Text color={"grey"} pt={"1"} ps="2">
             @{thread.created.username}
           </Text>
+          <Spacer />
+          <Box display={"flex"} flexDirection={"column"} gap="2">
+            <Pencil onClick={onOpen} cursor={"pointer"} size="20" />
+            <Trash2 size="20" onClick={handleDelete} cursor={"pointer"} />
+          </Box>
+          <ThreadModal isOpen={isOpen} onClose={onClose} thread={thread} />
         </Flex>
         <Text color="white" ms="10" my="3" fontSize="14" textAlign="justify">
           {thread.content}

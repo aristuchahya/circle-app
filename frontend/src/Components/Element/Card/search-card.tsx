@@ -38,7 +38,7 @@ export function SearchCard() {
           </InputGroup>
         </Flex>
         {searchData.map((user) => (
-          <Box mt="3" display={"flex"}>
+          <Box mt="3" display={"flex"} key={user.id}>
             <Avatar size="md" src={user.photoProfile} />
             <VStack ms="3" spacing="0" align={"start"}>
               <Text fontSize="md">{user.fullName}</Text>
@@ -48,7 +48,7 @@ export function SearchCard() {
               <Text fontSize="md">{user.bio}</Text>
             </VStack>
             <Spacer />
-            <Follow mt="3" />
+            <Follow userId={user.id} initialIsFollowing={user.isFollowing} />
           </Box>
         ))}
       </Box>

@@ -1,48 +1,30 @@
-import { Button, ButtonProps } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { useFollows } from "../../../features/follows/hook/use-follows";
+import { FollowsCardProps } from "../Card/follows-card";
 
-interface TextProps extends ButtonProps {
-  top?: string;
-  left?: string;
-  right?: string;
-  bottom?: string;
-  fontSize?: string;
-  mt?: string;
-  onClick?: () => void;
-  isFollowing?: boolean;
-}
+export function Follow({ userId, initialIsFollowing }: FollowsCardProps) {
+  const { handleFollow, isFollowing } = useFollows({
+    userId,
+    initialIsFollowing,
+  });
 
-export function Follow({
-  top,
-  left,
-  right,
-  bottom,
-  fontSize,
-  mt,
-  onClick,
-  isFollowing,
-}: TextProps) {
   return (
     <>
       <Button
-        fontSize={fontSize}
-        mt={mt}
         px="12"
         py="3"
         boxSize="6"
         rounded="20"
         position="relative"
-        left={left}
-        top={top}
-        right={right}
-        bottom={bottom}
+        fontSize="12"
         border="1px solid white"
         bg="#262626"
-        color={isFollowing ? "grey" : "white"}
+        color="white"
         fontWeight="md"
-        onClick={onClick}
         _hover={{ bg: "white", color: "black" }}
+        onClick={handleFollow}
       >
-        {isFollowing ? "Following" : "Follow"}
+        {isFollowing ? "Unfollow" : "Follow"}
       </Button>
     </>
   );

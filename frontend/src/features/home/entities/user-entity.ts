@@ -6,6 +6,7 @@ export type UserEntity = {
   bio: string;
   email: string;
   password: string;
+  isFollowing: boolean;
   createdAt: Date;
   updatedAt: Date;
 };

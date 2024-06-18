@@ -60,6 +60,24 @@ const doc = {
         },
         required: ["fullName", "username", "email", "password"],
       },
+      UpdateUserDTO: {
+        type: "object",
+        properties: {
+          fullName: {
+            type: "string",
+          },
+          username: {
+            type: "string",
+          },
+          photoProfile: {
+            type: "file",
+          },
+          bio: {
+            type: "string",
+          },
+        },
+        required: ["photoProfile", "bio"],
+      },
     },
     securitySchemes: {
       bearerAuth: {

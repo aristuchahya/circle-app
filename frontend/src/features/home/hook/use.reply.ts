@@ -52,7 +52,7 @@ export const useReply = ({ thread }: HomeThreadsProps) => {
         },
       }
     );
-    console.log("reply count:", response.data);
+
     return response.data;
   }
 
