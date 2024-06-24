@@ -16,6 +16,9 @@ import { useReply } from "../hook/use.reply";
 import { Post } from "../../../Components/Element/Button/post";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useLike } from "../hook/use-like";
+import { FaHeart } from "react-icons/fa6";
+import { formatDateNow } from "../../../libs/format-date";
 
 export interface HomeThreadsProps {
   thread: ThreadEntity;
@@ -33,6 +36,12 @@ export function HomeThreads({ thread }: HomeThreadsProps) {
     showComment,
     replyCount,
   } = useReply({ thread });
+
+  const { likeThread, likes } = useLike({ thread });
+  const handleLikeClick = () => {
+    likeThread({ threadId: thread.id });
+  };
+
   return (
     <>
       <Box m="5" maxW="xl" position={"relative"} bottom="14">
@@ -44,15 +53,26 @@ export function HomeThreads({ thread }: HomeThreadsProps) {
           <Text color={"grey"} pt={"3"} ps="2">
             @{thread.created.username}
           </Text>
+          <Text pt="3" ps={"2"}>
+            {formatDateNow(thread.createdAt)}
+          </Text>
         </Flex>
         <Text color="white" ms="10" my="3" fontSize="14" textAlign="justify">
           {thread.content}
         </Text>
         <Image src={thread.image} borderRadius="lg" ms="10" width={"md"} />
         <HStack mb="3" ms="5">
-          <Icon as={CiHeart} color={"white"} mt="3" ms="4" boxSize={"5"} />
-          <Text mt="3" position="relative" right="2" fontSize="12">
-            {thread.numberOfLikes}
+          <Icon
+            as={likes.isLikedUser ? FaHeart : CiHeart}
+            color={"white"}
+            mt="3"
+            ms="4"
+            boxSize={"5"}
+            onClick={handleLikeClick}
+            cursor={"pointer"}
+          />
+          <Text mt="3" position="relative" right="1" fontSize="12">
+            {likes.likesCount}
           </Text>
           <Icon
             as={TfiCommentAlt}
@@ -78,7 +98,7 @@ export function HomeThreads({ thread }: HomeThreadsProps) {
               <Box ms="6" mb="3" key={reply.id}>
                 <Flex>
                   <Avatar size="sm" mt="2" src={reply.User?.photoProfile} />
-                  {/* <Text ms="2">{reply.User?.fullName}</Text> */}
+
                   <Text ms="2" color="grey">
                     @{reply.User?.username}
                   </Text>

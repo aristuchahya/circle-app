@@ -21,6 +21,7 @@ model User {
   password     String
   photoProfile String?
   bio          String?
+  isVerified   Boolean @default(false)
 
   likes     Like[]
   replies   Reply[]
@@ -61,7 +62,7 @@ model Like {
   User   User @relation(fields: [userId], references: [id])
   userId Int
 
-  Thread   Thread @relation(fields: [threadId], references: [id])
+  Thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
   threadId Int
 
   createdAt DateTime @default(now())
@@ -77,7 +78,7 @@ model Reply {
 
   User     User   @relation(fields: [userId], references: [id])
   userId   Int
-  Thread   Thread @relation(fields: [threadId], references: [id])
+  Thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
   threadId Int
 
   // threads Thread[] @relation("UserReply")
@@ -100,4 +101,19 @@ model Following {
 
   @@unique([followingId, followerId])
   @@map("following")
+}
+
+model Verification {
+  id        Int              @id @default(autoincrement())
+  token     String           @unique
+  type      VerificationType @default(EMAIL)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now()) @updatedAt
+
+  @@map("verifications")
+}
+
+enum VerificationType {
+  EMAIL
+  FORGOT_PASSWORD
 }

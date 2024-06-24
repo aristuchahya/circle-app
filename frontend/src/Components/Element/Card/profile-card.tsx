@@ -4,6 +4,8 @@ import {
   Heading,
   HStack,
   Icon,
+  Image,
+  SimpleGrid,
   Tab,
   TabIndicator,
   TabList,
@@ -25,8 +27,9 @@ import { useSelector } from "react-redux";
 import { useProfile } from "../../../features/profile/hook/use-profile";
 import { useFollows } from "../../../features/follows/hook/use-follows";
 import { useEffect, useState } from "react";
+import { useTotalLike } from "../../../features/home/hook/use-total";
 
-interface ThreadProps {
+export interface ThreadProps {
   userId: number;
 }
 export function ProfileCard({ userId }: ThreadProps) {
@@ -35,12 +38,12 @@ export function ProfileCard({ userId }: ThreadProps) {
 
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const { threads } = useProfile(userId);
+  const { totalLike } = useTotalLike(userId);
 
   const { followings } = useFollows({ userId, initialIsFollowing: false });
   useEffect(() => {
     if (followings) {
       setFollowingCount(followings.length);
-      console.log("updated following count:", followings.length);
     }
   }, [followings]);
 
@@ -70,7 +73,7 @@ export function ProfileCard({ userId }: ThreadProps) {
           <Text color="grey" fontSize="12">
             Following
           </Text>
-          <Text fontSize="12">100</Text>
+          <Text fontSize="12">{totalLike}</Text>
           <Text color="grey" fontSize="12">
             Likes
           </Text>
@@ -92,6 +95,13 @@ export function ProfileCard({ userId }: ThreadProps) {
               {threads?.map((thread) => (
                 <PostCard key={thread.id} thread={thread} />
               ))}
+            </TabPanel>
+            <TabPanel>
+              <SimpleGrid columns={3} gap={2}>
+                {threads?.map((thread) => (
+                  <Image key={thread.id} src={thread.image} boxSize={"100%"} />
+                ))}
+              </SimpleGrid>
             </TabPanel>
           </TabPanels>
         </Tabs>

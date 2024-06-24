@@ -1,17 +1,19 @@
 import { useToast } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginForm } from "../types/use-form-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../validators/login-form";
 import { setUser } from "../../../redux/slices/auth";
 import { api } from "../../../libs/api";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const useLogin = () => {
   const dispatch = useDispatch();
   const toast = useToast();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -40,7 +42,7 @@ export const useLogin = () => {
           duration: 3000,
           isClosable: true,
         });
-        navigate("/");
+        queryClient.invalidateQueries({ queryKey: ["authUser"] });
       }
     } catch (error) {
       toast({

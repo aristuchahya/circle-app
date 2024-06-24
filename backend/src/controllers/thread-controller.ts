@@ -7,10 +7,10 @@ class ThreadsController {
   async findAll(req: Request, res: Response) {
     try {
       const thread = await threadService.getAllThreads();
-
+      // await redisClient.set("Threads_Data", JSON.stringify(thread));
       res.json(thread);
     } catch (error) {
-      return error;
+      res.status(400).json({ message: "Bad Request" });
     }
   }
 
@@ -83,11 +83,11 @@ class ThreadsController {
 
   async deleteThread(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const thread = await threadService.findOneThread(Number(id));
+      const { threadId } = req.params;
+      const thread = await threadService.findOneThread(Number(threadId));
       if (!thread) return res.status(404).json({ message: "Thread not found" });
-      const deleteThread = await threadService.deleteThread(Number(id));
-      res.status(200).json({ message: "Thread deleted" });
+      const deleteThread = await threadService.deleteThread(Number(threadId));
+      res.status(200).json({ message: "Thread deleted", deleteThread });
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }

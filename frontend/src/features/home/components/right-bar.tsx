@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Card,
   CardBody,
@@ -16,39 +15,24 @@ import { FaFacebook, FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { EditProfile } from "../../../Components/Element/Button/edit";
 import { EditModal } from "../../../Components/Element/Modal/edit-modal";
 
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
 import { Suggested } from "../../../Components/Element/Card/suggest-card";
+import { HeadProfile } from "../../../Components/Element/Heading/head-profile";
+import { useUpdate } from "../../profile/hook/use-update";
 
 export function RightBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+
+  const { user } = useUpdate();
 
   return (
     <>
-      <Box m="5" maxW="lg">
+      <Box m="5" maxW="sm">
         <Card bg="#262626">
           <CardBody>
             <Heading fontSize="xl" m="3" ms="1" color="white" fontWeight="bold">
               My Profile
             </Heading>
-            <Box
-              bg="blue"
-              borderRadius="lg"
-              p={4}
-              position="relative"
-              overflow="hidden"
-              w="100%"
-              h="70"
-            />
-            <Avatar
-              boxSize="3.5em"
-              border="3px solid black"
-              position="relative"
-              bottom="9"
-              left="5"
-              src={currentUser.photoProfile}
-            ></Avatar>
+            <HeadProfile />
             <Flex justify="flex-end">
               <EditProfile
                 fontSize="12"
@@ -61,17 +45,17 @@ export function RightBar() {
             </Flex>
             <Flex direction="column" position="relative" bottom="4">
               <Text color="white" fontSize="xl" fontWeight="semibold">
-                {currentUser.fullName}
+                {user?.fullName}
               </Text>
               <Text color="grey" fontSize="12" mb="2">
-                @{currentUser.username}
+                @{user?.username}
               </Text>
               <Text color="white" fontSize="12" fontWeight="medium">
-                {currentUser.bio}
+                {user?.bio}
               </Text>
               <HStack spacing={"2"}>
                 <Text color="white" fontSize="12">
-                  290
+                  2
                 </Text>
                 <Text color="grey" fontSize="12">
                   Following

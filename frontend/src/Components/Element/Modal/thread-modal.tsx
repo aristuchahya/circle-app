@@ -41,7 +41,7 @@ export function ThreadModal({ isOpen, onClose, thread }: ThreadModalProps) {
   ): Promise<void> => {
     event.preventDefault();
     await updateThread({ content: editContent, image: imageFile });
-    onClose(); // Menutup modal setelah submit
+    onClose();
   };
   return (
     <>

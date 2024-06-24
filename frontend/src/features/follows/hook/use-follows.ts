@@ -18,7 +18,7 @@ export const useFollows = ({
         Authorization: `Bearer ${localStorage.token}`,
       },
     });
-    return response.data;
+    return response.data.following;
   };
 
   const getFollowers = async () => {
@@ -45,7 +45,6 @@ export const useFollows = ({
 
   const followMutation = useMutation({
     mutationFn: async () => {
-      console.log(`following with ID: ${userId}`);
       return await api.post(
         "/users/follow",
         { followingId: userId },
@@ -136,12 +135,9 @@ export const useFollows = ({
   });
 
   const handleFollow = () => {
-    console.log(`handleFollow called with isFollowing: ${isFollowing}`);
     if (isFollowing) {
-      console.log(`Unfollowing user with ID: ${userId}`);
       unFollowMutation.mutate();
     } else {
-      console.log(`following with ID: ${userId}`);
       followMutation.mutate();
     }
   };

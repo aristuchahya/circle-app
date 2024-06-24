@@ -111,10 +111,10 @@ class ThreadSevice {
     }
   }
 
-  async deleteThread(id: number) {
+  async deleteThread(threadId: number) {
     try {
-      return await prisma.thread.delete({
-        where: { id: Number(id) },
+      await prisma.thread.delete({
+        where: { id: Number(threadId) },
       });
     } catch (error) {
       return error;

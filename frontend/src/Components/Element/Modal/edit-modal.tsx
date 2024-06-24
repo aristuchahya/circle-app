@@ -13,6 +13,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   Textarea,
 } from "@chakra-ui/react";
@@ -20,22 +21,15 @@ import { PostModalProps } from "./post-modal";
 import { Camera } from "lucide-react";
 
 import { Post } from "../Button/post";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../../../redux/store";
 import { useUpdate } from "../../../features/profile/hook/use-update";
-import { useEffect } from "react";
 
 export function EditModal({ isOpen, onClose }: PostModalProps) {
-  const currentUser = useSelector((state: RootState) => state.auth.user);
-  const { register, handleSubmit, onSubmit, setValue } = useUpdate();
+  // const currentUser = useSelector((state: RootState) => state.auth.user);
+  const { register, handleSubmit, onSubmit, isSubmitting, uploading, user } =
+    useUpdate();
 
-  useEffect(() => {
-    if (currentUser) {
-      setValue("fullName", currentUser.fullName);
-      setValue("username", currentUser.username);
-      setValue("bio", currentUser.bio);
-    }
-  }, [currentUser, setValue]);
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -56,8 +50,9 @@ export function EditModal({ isOpen, onClose }: PostModalProps) {
               border="3px solid black"
               bottom="9"
               left="3"
-              src={currentUser.photoProfile}
+              src={user?.photoProfile}
             />
+
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl>
                 <FormLabel
@@ -71,8 +66,6 @@ export function EditModal({ isOpen, onClose }: PostModalProps) {
                 <Input
                   type="file"
                   id="upload-file"
-                  display="none"
-                  hidden
                   accept="image/*"
                   {...register("photoProfile")}
                 />
@@ -123,11 +116,12 @@ export function EditModal({ isOpen, onClose }: PostModalProps) {
                 </Stack>
                 <Divider />
                 <Flex justify={"flex-end"} mt="2">
-                  <Post type="submit" fontSize="14">
-                    Save
+                  <Post type="submit" fontSize="14" disabled={isSubmitting}>
+                    {isSubmitting ? "Updating..." : "Update"}
                   </Post>
                 </Flex>
               </FormControl>
+              {uploading && <Spinner />}
             </form>
           </ModalBody>
         </ModalContent>

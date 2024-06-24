@@ -3,13 +3,28 @@ import { createreplyschema, ReplyDto } from "../dto/reply-dto";
 
 const prisma = new PrismaClient();
 class ReplyService {
-  async findBy(id: number) {
+  async findBy(threadId: number, userId: number) {
     try {
-      const reply = await prisma.reply.findUnique({
-        where: { id },
-        include: { User: true, Thread: true },
+      const thread = await prisma.thread.findUnique({
+        where: { id: threadId },
+        include: {
+          created: {
+            select: {
+              fullName: true,
+              username: true,
+            },
+          },
+          replies: true,
+        },
       });
-      return reply;
+
+      if (!thread) throw new Error("Thread not found");
+
+      const replyCount = await prisma.reply.count({
+        where: { threadId },
+      });
+
+      return { ...thread, replyCount };
     } catch (error) {
       return error;
     }
@@ -70,10 +85,10 @@ class ReplyService {
 
   async countReplies(threadId: number) {
     try {
-      const count = await prisma.reply.count({
+      const replyCount = await prisma.reply.count({
         where: { threadId },
       });
-      return count;
+      return replyCount;
     } catch (error) {
       throw new Error(error.message || "Failed to count replies");
     }

@@ -76,19 +76,6 @@ class UserController {
     }
   }
 
-  // async followStatus(req: Request, res: Response) {
-  //   try {
-  //     const user = res.locals.user;
-
-  //     if (!user) return res.status(404).json({ message: "User not found" });
-
-  //     const result = await userService.find(user);
-  //     res.status(201).json({ message: "find follows", result });
-  //   } catch (error) {
-  //     return res.status(500).json({ message: "Internal server error" });
-  //   }
-  // }
-
   async follow(req: Request, res: Response) {
     const user = res.locals.user;
     const body = {

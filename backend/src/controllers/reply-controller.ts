@@ -47,8 +47,8 @@ class ReplyController {
     try {
       const { threadId } = req.params;
 
-      const reply = await replyService.countReplies(Number(threadId));
-      res.json(reply);
+      const replyCount = await replyService.countReplies(Number(threadId));
+      res.json({ replyCount });
     } catch (error) {
       res.status(400).json({ message: "Bad Request" });
     }
@@ -67,10 +67,11 @@ class ReplyController {
 
   async findReply(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const reply = await replyService.findBy(Number(id));
+      const { threadId } = req.params;
+      const userId = res.locals.user.id;
+      const reply = await replyService.findBy(Number(threadId), userId);
       if (!reply) return res.status(404).json({ message: "Reply not found" });
-      res.status(200).json({ message: "success", reply });
+      res.status(200).json(reply);
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }
@@ -79,7 +80,8 @@ class ReplyController {
   async deleteReply(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const reply = await replyService.findBy(Number(id));
+      const userId = res.locals.user.id;
+      const reply = await replyService.findBy(Number(id), userId);
       if (!reply) return res.status(404).json({ message: "Reply not found" });
       const deleteReply = await replyService.deleteReply(Number(id));
       res.status(200).json({ message: "Reply has deleted" });

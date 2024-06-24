@@ -13,7 +13,6 @@ import { useHomePage } from "../features/home/hook/use-home";
 function Home() {
   const { threads } = useHomePage();
 
-  console.log("Home threads:", threads);
   return (
     <div>
       <Box display={"flex"} gap={"2"}>

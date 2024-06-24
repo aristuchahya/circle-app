@@ -16,13 +16,10 @@ export const useReply = ({ thread }: HomeThreadsProps) => {
     enabled: !!thread.id,
   });
 
-  const { data: replyCountData } = useQuery<{ count: number }>({
+  const { data: replyCount } = useQuery<number>({
     queryKey: ["replyCount", thread.id],
     queryFn: () => getCountReply(thread.id),
-    enabled: !!thread.id,
   });
-
-  const replyCount = replyCountData?.count || 0;
 
   const {
     register,
@@ -39,21 +36,19 @@ export const useReply = ({ thread }: HomeThreadsProps) => {
         Authorization: `Bearer ${localStorage.token}`,
       },
     });
+
     return response.data;
   }
 
   async function getCountReply(threadId: number) {
     if (!thread.id) throw new Error("thread id not found");
-    const response = await api.get<{ count: number }>(
-      `replies/${threadId}/count`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.token}`,
-        },
-      }
-    );
-
-    return response.data;
+    const response = await api.get(`replies/${threadId}/count`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.token}`,
+      },
+    });
+    console.log("count reply:", response.data);
+    return response.data.replyCount;
   }
 
   const { mutateAsync } = useMutation<ReplyEntity, AxiosError, ReplyForm>({

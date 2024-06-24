@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { likeService } from "../services/likes-service";
+import { error } from "console";
 
 class LikeController {
   async createLike(req: Request, res: Response) {
@@ -19,8 +20,10 @@ class LikeController {
 
   async findAllLike(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const like = await likeService.findAll(Number(id));
+      const userId = res.locals.user.id;
+      if (isNaN(userId))
+        return res.status(404).json({ error: "invalid userId" });
+      const like = await likeService.findAll(userId);
       res.status(200).json(like);
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
@@ -29,11 +32,11 @@ class LikeController {
 
   async countLike(req: Request, res: Response) {
     try {
-      const { threadId } = req.params;
+      const { userId } = req.params;
 
-      const like = await likeService.updateLikeCount(Number(threadId));
-      console.log("count", like);
-      res.json(like);
+      const totalLike = await likeService.totalLikeUsers(Number(userId));
+
+      res.json({ totalLike });
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }
@@ -41,10 +44,11 @@ class LikeController {
 
   async findLike(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const like = await likeService.findBy(Number(id));
-      if (!like) return res.status(404).json({ message: "like not found" });
-      res.status(200).json({ message: "success", like });
+      const { threadId } = req.params;
+      const userId = res.locals.user.id;
+      const thread = await likeService.findBy(Number(threadId), userId);
+      if (!thread) return res.status(404).json({ message: "like not found" });
+      res.status(200).json(thread);
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }
@@ -52,11 +56,10 @@ class LikeController {
 
   async deleteLike(req: Request, res: Response) {
     try {
-      const { id } = req.params;
-      const like = await likeService.findBy(Number(id));
-      if (!like) return res.status(404).json({ message: "Like not found" });
-      const deleteLike = await likeService.deleteLike(Number(id));
-      res.status(200).json({ message: "Like has deleted" });
+      const userId = res.locals.user.id;
+      const { threadId } = req.body;
+      const deleteLike = await likeService.deleteLike(userId, threadId);
+      res.status(200).json(deleteLike);
     } catch (error) {
       return res.status(400).json({ message: "Bad Request" });
     }

@@ -5,7 +5,8 @@ export type ThreadEntity = {
   content: string;
   image: string;
   numberOfReplies: number;
-  numberOfLikes: number;
+  likesCount: number;
+  isLikedUser: boolean;
   created: UserEntity;
   createdAt: Date;
   updatedAt: Date;

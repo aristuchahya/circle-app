@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import cors from "cors";
 import { userController } from "../controllers/user-controller";
 import { authController } from "../controllers/auth-controller";
@@ -34,9 +34,19 @@ router.delete("/unfollow", authenticate, userController.unfollowUser);
 router.post("/auth/login", authController.login);
 router.post("/auth/register", authController.register);
 router.post("/auth/check", authenticate, authController.check);
+router.get("/auth/verify-email", authController.verifyEmail);
 
 //threads
-router.get("/threads", authenticate, threadController.findAll);
+router.get(
+  "/threads",
+  authenticate,
+  // async (req: Request, res: Response, next: NextFunction) => {
+  //   const result = await redisClient.get("Threads_Data");
+  //   if (result) return res.json(JSON.parse(result));
+  //   next();
+  // },
+  threadController.findAll
+);
 router.get("/users/:userId/threads", authenticate, threadController.findThread);
 router.post(
   "/threads",
@@ -50,12 +60,16 @@ router.patch(
   upload.single("image"),
   threadController.update
 );
-router.delete("/threads/:id", authenticate, threadController.deleteThread);
+router.delete(
+  "/threads/:threadId",
+  authenticate,
+  threadController.deleteThread
+);
 
 //reply
 router.post("/replies", authenticate, replyController.createReply);
 router.get("/threads/:id/replies", authenticate, replyController.findAllReply);
-router.get("/replies/:id", authenticate, replyController.findReply);
+router.get("/replies/:threadId", authenticate, replyController.findReply);
 router.delete("/replies/:id", authenticate, replyController.deleteReply);
 router.post("/replies/:id", authenticate, replyController.addReply);
 router.get(
@@ -66,9 +80,9 @@ router.get(
 
 //like
 router.post("/likes", authenticate, likeController.createLike);
-router.get("/threads/:id/likes", authenticate, likeController.findAllLike);
-router.get("/likes/:threadId/threads", authenticate, likeController.countLike);
-router.get("/likes/:id", authenticate, likeController.findLike);
-router.delete("/likes/:id", authenticate, likeController.deleteLike);
+router.get("/likes/total", authenticate, likeController.findAllLike);
+router.get("/likes/total/:userId", authenticate, likeController.countLike);
+router.get("/likes/:threadId", authenticate, likeController.findLike);
+router.delete("/unlikes", authenticate, likeController.deleteLike);
 
 export default router;

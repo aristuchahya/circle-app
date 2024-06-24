@@ -16,15 +16,15 @@ import {
 import { LuImagePlus } from "react-icons/lu";
 
 import { Post } from "../Button/post";
-import { RootState } from "../../../redux/store";
-import { useSelector } from "react-redux";
+
 import { useHomePage } from "../../../features/home/hook/use-home";
 import { ProcessModal } from "../Modal/process-modal";
+import { useUpdate } from "../../../features/profile/hook/use-update";
 
 export function Head() {
-  const currentUser = useSelector((state: RootState) => state.auth.user);
   const { register, handleSubmit, onSubmit, errors, isOpen, onClose } =
     useHomePage();
+  const { user } = useUpdate();
 
   return (
     <>
@@ -33,7 +33,7 @@ export function Head() {
           Home
         </Heading>
         <Box display="flex">
-          <Avatar size={"md"} mb="2" src={currentUser.photoProfile}>
+          <Avatar size={"md"} mb="2" src={user?.photoProfile}>
             <AvatarBadge boxSize="1em" bg="green.500" />
           </Avatar>
           <form onSubmit={handleSubmit(onSubmit)}>

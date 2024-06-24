@@ -110,10 +110,6 @@ class UserService {
     if (followerId === followingId)
       throw new Error("user cannot follow themselves");
     try {
-      console.log(
-        `Checking if user ${followerId} already follows user ${followingId}`
-      );
-
       const user = await prisma.user.findUnique({
         where: {
           id: followingId,
@@ -137,9 +133,6 @@ class UserService {
         throw new Error("User already followed");
       }
 
-      console.log(
-        `Creating follow relationship for user ${followerId} to follow user ${followingId}`
-      );
       const follow = await prisma.following.create({
         data: { ...dto },
       });
@@ -183,7 +176,7 @@ class UserService {
 
   async getFollowing(userId: number) {
     try {
-      return await prisma.following.findMany({
+      const following = await prisma.following.findMany({
         where: {
           followerId: userId,
         },
@@ -191,6 +184,8 @@ class UserService {
           following: true,
         },
       });
+
+      return { following };
     } catch (error) {
       throw new Error(error.message || "Failed to retrieve users");
     }

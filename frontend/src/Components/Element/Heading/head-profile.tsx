@@ -1,9 +1,11 @@
 import { Avatar, Box, Image } from "@chakra-ui/react";
-import { RootState } from "../../../redux/store";
-import { useSelector } from "react-redux";
+// import { RootState } from "../../../redux/store";
+// import { useSelector } from "react-redux";
+import { useUpdate } from "../../../features/profile/hook/use-update";
 
 export function HeadProfile() {
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  // const currentUser = useSelector((state: RootState) => state.auth.user);
+  const { user } = useUpdate();
   return (
     <>
       <Box borderRadius="lg" overflow="hidden" w="100%" h="70">
@@ -18,7 +20,7 @@ export function HeadProfile() {
         border="3px solid black"
         bottom="9"
         left="3"
-        src={currentUser.photoProfile}
+        src={user?.photoProfile}
       />
     </>
   );
