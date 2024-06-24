@@ -53,7 +53,7 @@ class AuthController {
       console.log(req.body);
       res.status(201).json(user);
     } catch (error) {
-      return res.status(400).json({ message: "Bad Request" });
+      return res.status(400).json({ message: error.message });
     }
   }
 
